@@ -21,8 +21,8 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS",
-      "pre-commit": "eslint \"src/**/*.{ts,tsx}\""
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
     }
   },
   "dependencies": {
