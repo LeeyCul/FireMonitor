@@ -15,15 +15,7 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "no-console": "off",
     "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
-    "import/extensions": [
-      // 引入文件识别不到
-      "off",
-      "never"
-    ],
-    "import/no-unresolved": 0, // 引入文件识别不到
     "react/jsx-filename-extension": [
       0,
       {
@@ -33,6 +25,41 @@
     "no-const-assign": 2,
     "no-func-assign": 2,
     "arrow-parens": 0,
-    "global-require": 0
+    "global-require": 0,
+    "import/no-unresolved": 0,
+    "import/extensions": ["off", "never"],
+    "react/require-default-props": 0,
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "none",
+        "ignoreRestSiblings": false
+      }
+    ],
+    "jsx-a11y/click-events-have-key-events": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "no-inner-declarations": 0,
+    "react/jsx-props-no-spreading": 0,
+    "no-unused-expressions": 0,
+    "no-restricted-syntax": 0,
+    "guard-for-in": 0,
+    "no-param-reassign": 0,
+    "max-len": 0,
+    "react/no-array-index-key": 0,
+    "react/no-danger": 0,
+    "react/no-this-in-sfc": 0,
+    "no-nested-ternary": 0,
+    "no-mixed-operators": 0,
+    "consistent-return": 0,
+    "no-plusplus": 0,
+    "no-underscore-dangle": 0,
+    "func-names": 0,
+    "no-return-assign": 0,
+    "prefer-const": 0,
+    "no-multi-assign": 0,
+    "no-continue": 0,
+    "jsx-a11y/anchor-is-valid": 0,
+    "import/no-extraneous-dependencies": 0
   }
 }
