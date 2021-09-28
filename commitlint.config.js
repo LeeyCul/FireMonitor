@@ -27,11 +27,7 @@ module.exports = {
         'ci',
       ],
     ],
-    'type-empty': [2, 'never'], // <type> 不能为空
-    'type-case': [2, 'always', 'lower-case'], // <type>格式小写
-    'scope-empty': [2, 'never'], // <scope> 不能为空
-    'scope-case': [2, 'always', 'lower-case'], // <scope> 格式 小写
-    'subject-empty': [2, 'never'], // <subject> 不能为空
-    'subject-full-stop': [2, 'never', '.'],
+    'type-empty': [2, 'never'], //type不能为空
+    'type-case': [2, 'always', 'lower-case'], // type格式小写
   },
 };
