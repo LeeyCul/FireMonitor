@@ -1,4 +1,4 @@
-import { defineConfig, dynamic } from 'umi';
+import { defineConfig } from 'umi';
 import routes from './route';
 
 const pxtorem = require('postcss-pxtorem');
@@ -14,7 +14,7 @@ export default defineConfig({
   locale: { antd: true },
   routes,
   fastRefresh: {},
-  chainWebpack: function () {},
+  chainWebpack() {},
   dynamicImport: {
     loading: '@/common/components/Loading',
   },

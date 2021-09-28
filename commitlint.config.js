@@ -27,7 +27,5 @@ module.exports = {
         'ci',
       ],
     ],
-    // 'type-empty': [2, 'never'], // type不能为空
-    // 'type-case': [2, 'always', 'lower-case'], // type格式小写
   },
 };
