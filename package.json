@@ -28,6 +28,7 @@
     "@ant-design/pro-layout": "^6.5.0",
     "@commitlint/cli": "^13.2.0",
     "@commitlint/config-conventional": "^13.2.0",
+    "husky": "^7.0.2",
     "lodash": "^4.17.21",
     "postcss-pxtorem": "^5.1.1",
     "react": "17.x",
