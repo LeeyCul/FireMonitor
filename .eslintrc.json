@@ -1,0 +1,38 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "@typescript-eslint"],
+  "rules": {
+    "no-console": "off",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "import/extensions": [
+      // 引入文件识别不到
+      "off",
+      "never"
+    ],
+    "import/no-unresolved": 0, // 引入文件识别不到
+    "react/jsx-filename-extension": [
+      0,
+      {
+        "extensions": [".js", ".jsx", ".tsx"]
+      }
+    ],
+    "no-const-assign": 2,
+    "no-func-assign": 2,
+    "arrow-parens": 0,
+    "global-require": 0
+  }
+}
