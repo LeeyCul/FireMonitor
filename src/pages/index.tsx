@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, Input, Table } from 'antd';
 import styles from './index.less';
 import { useFullScreen } from '@/common/hooks';
@@ -27,7 +26,7 @@ const columns = [
     key: 'name',
   },
   {
-    title: '年龄11',
+    title: '年龄112',
     dataIndex: 'age',
 
     key: 'age',
