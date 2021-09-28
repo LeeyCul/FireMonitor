@@ -19,12 +19,6 @@
       "prettier --parser=typescript --write"
     ]
   },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged"
-    }
-  },
   "dependencies": {
     "@ant-design/pro-layout": "^6.5.0",
     "@commitlint/cli": "^13.2.0",
