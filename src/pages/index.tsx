@@ -43,7 +43,7 @@ function IndexPage() {
     <>
       <div className={styles.view} onClick={() => useFullScreen()}>
         <Button type="primary" size="large">
-          你好呀
+          你好呀d
         </Button>
         <div className={styles.Box}>1111</div>
         <div className={styles.Box} />
