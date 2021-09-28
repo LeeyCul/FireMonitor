@@ -46,3 +46,34 @@ $ yarn build
     │   └── home
     └── models           数据状态存放
 ```
+
+## 提交规范-目标
+
+*   允许通过脚本生成变更文件
+*   当浏览提交历史时，提供更好的格式化信息
+*   生成 ChangeLog 以及管理版本号
+
+## 提交格式
+
+头部（Header）由三部分组成：<type>(<scope>): <subject>
+*   type: 提交类型
+*   type: 提交类型
+*   scope: 范围（可理解为模块）
+*   subject: 标题（可理解为提交概要信息）
+
+例如： git commit -m 'feat: 新建'
+
+### 提交类型
+
+只允许以下几种提交类型：
+
+*   feat: 增加新功能
+*   fix: Bug 修复
+*   perf: 性能优化
+*   revert: 撤销
+*   docs: 文档
+*   style: 代码格式（非 UI）
+*   refactor: 重构
+*   chore: 比较零碎的变动
+*   ci: 持续集成脚本（example scopes: travis, circle, browser-stack, sauce-labs）
+
