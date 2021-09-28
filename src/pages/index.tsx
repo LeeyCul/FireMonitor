@@ -26,7 +26,7 @@ const columns = [
     key: 'name',
   },
   {
-    title: '年龄',
+    title: '年龄11',
     dataIndex: 'age',
     key: 'age',
   },
