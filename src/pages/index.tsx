@@ -1,7 +1,6 @@
 import { Button, Input, Table } from 'antd';
 import styles from './index.less';
 import { useFullScreen } from '@/common/hooks';
-import '@/common/utils/postPxToRem';
 
 const dataSource = [
   {
