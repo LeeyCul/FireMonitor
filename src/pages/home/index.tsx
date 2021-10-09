@@ -49,7 +49,7 @@ function Home() {
     });
     map.addControl(a);
     console.log('map', map.addControl);
-    // 创建可视化图层——绘制散点图层
+    // 创建可视化图层——绘制散点图层1
     const layer = new Loca.HeatmapLayer({
       map,
     });
