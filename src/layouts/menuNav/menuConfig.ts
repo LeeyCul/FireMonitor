@@ -1,6 +1,6 @@
 export default [
   {
-    name: '监测122444',
+    name: '监测',
     path: '/',
     icon: 'icon-gailan',
     key: '',
