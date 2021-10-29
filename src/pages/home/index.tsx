@@ -5,7 +5,7 @@ import styles from './style.less';
 function Home() {
   return (
     <div className={styles.conainer} id="conainer">
-      <Icon type="icon-fenxi1" />
+      <Icon type="icon-gailan" />
       <Amap mapId="HOMEMAP" />
     </div>
   );
