@@ -1,0 +1,13 @@
+.multi-line-ellipsis(@lineNum: 2) {
+  display: -webkit-box !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  -webkit-line-clamp: @lineNum;
+  -webkit-box-orient: vertical;
+}
+
+.font-family(@font: PingFangSC-Regular) {
+  font-family: @font, 'PingFang SC', -apple-system, BlinkMacSystemFont,
+    Avenir Next, Avenir, Helvetica, sans-serif;
+}

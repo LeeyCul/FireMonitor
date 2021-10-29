@@ -18,6 +18,13 @@ export default defineConfig({
   dynamicImport: {
     loading: '@/common/components/Loading',
   },
+  proxy: {
+    '/api': {
+      target: 'https://restapi.amap.com/v3/',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
+  },
   extraPostCSSPlugins: [
     pxtorem({
       rootValue: 100,

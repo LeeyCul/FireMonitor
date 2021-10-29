@@ -10,7 +10,7 @@ const postPxToRem = () => {
     vW = (vH * 1920) / 1080;
   }
   let rem = vW * basePc;
-  document.documentElement.style.fontSize = rem + 'px';
+  document.documentElement.style.fontSize = `${rem}px`;
 };
 
 postPxToRem();

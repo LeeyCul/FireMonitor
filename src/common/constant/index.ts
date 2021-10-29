@@ -2,5 +2,5 @@
  * mapKey
  */
 export const BasicConstants = {
-  MapKey: '86ab995c2468dc8401ca4896e0a48dfc',
+  MapKey: '40aff7a4ba7ddda12efc54ea75879d66',
 };
