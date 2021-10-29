@@ -1,6 +1,6 @@
 import { Link, history } from 'umi';
 import { Menu } from 'antd';
-import Icon from '@/common/components/Iconfont';
+import Icon from '../../common/components/IconFont';
 import menuConfig from './menuConfig';
 
 const { SubMenu } = Menu;
