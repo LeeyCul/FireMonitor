@@ -26,6 +26,7 @@
     "@ant-design/pro-layout": "^6.5.0",
     "@commitlint/cli": "^13.2.0",
     "@commitlint/config-conventional": "^13.2.0",
+    "@types/amap-js-api": "^1.4.10",
     "dayjs": "^1.10.7",
     "eslint-plugin-typescript": "^0.14.0",
     "lodash": "^4.17.21",
