@@ -13,7 +13,7 @@ export default [
   },
   {
     name: '服务',
-    path: '/serve',
+    path: '/serveReport/list',
     icon: 'icon-fenxi1',
     key: 'serve',
   },

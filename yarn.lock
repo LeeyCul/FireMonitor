@@ -3364,6 +3364,11 @@ classnames@2.x, classnames@^2.2.0, classnames@^2.2.1, classnames@^2.2.3, classna
   resolved "https://registry.nlark.com/classnames/download/classnames-2.3.1.tgz?cache=0&sync_timestamp=1624608002819&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fclassnames%2Fdownload%2Fclassnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
   integrity sha1-38+jiR4wbsHa0QXQ6I9EF7hTXo4=
 
+claygl@^1.2.1:
+  version "1.3.0"
+  resolved "https://registry.nlark.com/claygl/download/claygl-1.3.0.tgz#7a6e2903210519ac358848f5d78070ed211685f3"
+  integrity sha1-em4pAyEFGaw1iEj114Bw7SEWhfM=
+
 clean-regexp@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/clean-regexp/download/clean-regexp-1.0.0.tgz#8df7c7aae51fd36874e8f8d05b9180bc11a3fed7"
@@ -4148,6 +4153,21 @@ ecc-jsbn@~0.1.1:
   dependencies:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
+
+echarts-gl@^1.1.1:
+  version "1.1.2"
+  resolved "https://registry.nlark.com/echarts-gl/download/echarts-gl-1.1.2.tgz?cache=0&sync_timestamp=1628224311710&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fecharts-gl%2Fdownload%2Fecharts-gl-1.1.2.tgz#fb38454031bb64c91afb84c57b1a99c370e4571e"
+  integrity sha1-+zhFQDG7ZMka+4TFexqZw3DkVx4=
+  dependencies:
+    claygl "^1.2.1"
+    zrender "^4.0.4"
+
+echarts@^4.1.0:
+  version "4.9.0"
+  resolved "https://registry.npmmirror.com/echarts/download/echarts-4.9.0.tgz#a9b9baa03f03a2a731e6340c55befb57a9e1347d"
+  integrity sha1-qbm6oD8Doqcx5jQMVb77V6nhNH0=
+  dependencies:
+    zrender "4.3.2"
 
 electron-to-chromium@^1.3.857:
   version "1.3.862"
@@ -5498,7 +5518,7 @@ identity-obj-proxy@3.0.0:
   dependencies:
     harmony-reflect "^1.4.6"
 
-ieee754@^1.1.4:
+ieee754@^1.1.4, ieee754@^1.1.6:
   version "1.2.1"
   resolved "https://registry.nlark.com/ieee754/download/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha1-jrehCmP/8l0VpXsAFYbRd9Gw01I=
@@ -7584,6 +7604,15 @@ object.values@^1.1.4:
     define-properties "^1.1.3"
     es-abstract "^1.19.1"
 
+ol@^5.3.0:
+  version "5.3.3"
+  resolved "https://registry.npmmirror.com/ol/download/ol-5.3.3.tgz#ad39b7b485fdbae4b3e1535a0a07cc5d88b0b9b5"
+  integrity sha1-rTm3tIX9uuSz4VNaCgfMXYiwubU=
+  dependencies:
+    pbf "3.1.0"
+    pixelworks "1.1.0"
+    rbush "2.0.2"
+
 omit.js@^2.0.2:
   version "2.0.2"
   resolved "https://registry.nlark.com/omit.js/download/omit.js-2.0.2.tgz#dd9b8436fab947a5f3ff214cb2538631e313ec2f"
@@ -7607,6 +7636,15 @@ opencollective-postinstall@^2.0.2:
   version "2.0.3"
   resolved "https://registry.nlark.com/opencollective-postinstall/download/opencollective-postinstall-2.0.3.tgz#7a0fff978f6dbfa4d006238fbac98ed4198c3259"
   integrity sha1-eg//l49tv6TQBiOPusmO1BmMMlk=
+
+openlayers_echart@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.npmmirror.com/openlayers_echart/download/openlayers_echart-1.1.2.tgz#319b94fd4fa4e889689a82e78cb76df739e487d3"
+  integrity sha1-MZuU/U+k6IlomoLnjLdt9znkh9M=
+  dependencies:
+    echarts "^4.1.0"
+    echarts-gl "^1.1.1"
+    ol "^5.3.0"
 
 optionator@^0.8.1:
   version "0.8.3"
@@ -7859,6 +7897,14 @@ path-type@^4.0.0:
   resolved "https://registry.nlark.com/path-type/download/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha1-hO0BwKe6OAr+CdkKjBgNzZ0DBDs=
 
+pbf@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npm.taobao.org/pbf/download/pbf-3.1.0.tgz#f70004badcb281761eabb1e76c92f179f08189e9"
+  integrity sha1-9wAEutyygXYeq7HnbJLxefCBiek=
+  dependencies:
+    ieee754 "^1.1.6"
+    resolve-protobuf-schema "^2.0.0"
+
 pbkdf2@^3.0.3:
   version "3.1.2"
   resolved "https://registry.nlark.com/pbkdf2/download/pbkdf2-3.1.2.tgz#dd822aa0887580e52f1a039dc3eda108efae3075"
@@ -7896,6 +7942,11 @@ pirates@^4.0.1:
   integrity sha1-ZDqSyviUVm+RsrmG0sZpUKji+4c=
   dependencies:
     node-modules-regexp "^1.0.0"
+
+pixelworks@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.nlark.com/pixelworks/download/pixelworks-1.1.0.tgz#1f095ad48dca8bf8a1c8258e0092031a44f22ca5"
+  integrity sha1-Hwla1I3Ki/ihyCWOAJIDGkTyLKU=
 
 pkg-dir@^2.0.0:
   version "2.0.0"
@@ -8457,6 +8508,11 @@ prop-types@15.x, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, pr
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
+protocol-buffers-schema@^3.3.1:
+  version "3.6.0"
+  resolved "https://registry.nlark.com/protocol-buffers-schema/download/protocol-buffers-schema-3.6.0.tgz?cache=0&sync_timestamp=1631215317148&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fprotocol-buffers-schema%2Fdownload%2Fprotocol-buffers-schema-3.6.0.tgz#77bc75a48b2ff142c1ad5b5b90c94cd0fa2efd03"
+  integrity sha1-d7x1pIsv8ULBrVtbkMlM0Pou/QM=
+
 pseudomap@^1.0.2:
   version "1.0.2"
   resolved "https://registry.nlark.com/pseudomap/download/pseudomap-1.0.2.tgz#f052a28da70e618917ef0a8ac34c1ae5a68286b3"
@@ -8557,6 +8613,11 @@ quick-lru@^4.0.1:
   resolved "https://registry.nlark.com/quick-lru/download/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha1-W4h48ROlgheEjGSCAmxz4bpXcn8=
 
+quickselect@^1.0.1:
+  version "1.1.1"
+  resolved "https://registry.nlark.com/quickselect/download/quickselect-1.1.1.tgz#852e412ce418f237ad5b660d70cffac647ae94c2"
+  integrity sha1-hS5BLOQY8jetW2YNcM/6xkeulMI=
+
 raf@^3.1.0, raf@^3.3.2, raf@^3.4.0:
   version "3.4.1"
   resolved "https://registry.nlark.com/raf/download/raf-3.4.1.tgz#0742e99a4a6552f445d73e3ee0328af0ff1ede39"
@@ -8578,6 +8639,13 @@ randomfill@^1.0.3:
   dependencies:
     randombytes "^2.0.5"
     safe-buffer "^5.1.0"
+
+rbush@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.nlark.com/rbush/download/rbush-2.0.2.tgz#bb6005c2731b7ba1d5a9a035772927d16a614605"
+  integrity sha1-u2AFwnMbe6HVqaA1dykn0WphRgU=
+  dependencies:
+    quickselect "^1.0.1"
 
 rc-align@^2.4.0:
   version "2.4.5"
@@ -9563,6 +9631,13 @@ resolve-pathname@^3.0.0:
   version "3.0.0"
   resolved "https://registry.nlark.com/resolve-pathname/download/resolve-pathname-3.0.0.tgz#99d02224d3cf263689becbb393bc560313025dcd"
   integrity sha1-mdAiJNPPJjaJvsuzk7xWAxMCXc0=
+
+resolve-protobuf-schema@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.nlark.com/resolve-protobuf-schema/download/resolve-protobuf-schema-2.1.0.tgz#9ca9a9e69cf192bbdaf1006ec1973948aa4a3758"
+  integrity sha1-nKmp5pzxkrva8QBuwZc5SKpKN1g=
+  dependencies:
+    protocol-buffers-schema "^3.3.1"
 
 resolve-url@^0.2.1:
   version "0.2.1"
@@ -11406,6 +11481,11 @@ yorkie@^2.0.0:
     is-ci "^1.0.10"
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
+
+zrender@4.3.2, zrender@^4.0.4:
+  version "4.3.2"
+  resolved "https://registry.nlark.com/zrender/download/zrender-4.3.2.tgz#ec7432f9415c82c73584b6b7b8c47e1b016209c6"
+  integrity sha1-7HQy+UFcgsc1hLa3uMR+GwFiCcY=
 
 zscroller@~0.4.0:
   version "0.4.8"
