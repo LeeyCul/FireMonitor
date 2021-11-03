@@ -1,0 +1,86 @@
+@import url('../../common/styles/mixin.less');
+.loginView {
+  height: 100vh;
+  background: linear-gradient(217deg, #6b3bee, #00bafb) !important;
+
+  .loginContent {
+    width: 1012px;
+    height: 631px;
+    padding: 12px;
+    background: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 30px;
+    opacity: 0.8;
+
+    .title {
+      .font-family();
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0095fb;
+      font-weight: bold;
+
+      font-size: 36px;
+
+      .logo {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+      }
+    }
+
+    .loginCard {
+      display: flex;
+
+      .loginB {
+        width: 579px;
+        height: 513px;
+      }
+    }
+  }
+}
+
+.loginFrom {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 513px;
+  margin-left: 50px;
+
+  .title {
+    height: 24px;
+    margin-bottom: 40px;
+    color: #0095fb;
+    font-weight: bold;
+    font-size: 24px;
+  }
+
+  .inputSty {
+    height: 44px;
+    background: #eefaff;
+    border: none;
+    // opacity: 0.5;
+    border-radius: 4px;
+  }
+
+  .inputText {
+    color: #0095fb;
+    font-weight: bold;
+    font-size: 16px;
+    background: #eefaff;
+  }
+
+  .loginBtn {
+    width: 175px;
+    height: 40px;
+    background: #0095fb;
+    border-radius: 20px;
+  }
+}
+
+:global {
+  .ant-input {
+    background: #eefaff;
+  }
+}
