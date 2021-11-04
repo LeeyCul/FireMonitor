@@ -2,25 +2,25 @@ export default [
   {
     name: '监测',
     path: '/',
-    icon: 'icon-gailan',
+    icon: 'icona-huoqingjianceweixuanzhong',
     key: '',
   },
   {
     name: '预测',
     path: '/forecast',
-    icon: 'icon-moxing1',
+    icon: 'icona-yujingxinxiweixuanzhong',
     key: 'forecast',
   },
   {
     name: '服务',
     path: '/serveReport/list',
-    icon: 'icon-fenxi1',
+    icon: 'icona-shujufuwuweixuanzhong',
     key: 'serve',
   },
   {
     name: '系统管理',
     path: '/system',
-    icon: 'icon-tongji',
+    icon: 'iconxitongshezhi1',
     key: 'system',
     children: [
       {

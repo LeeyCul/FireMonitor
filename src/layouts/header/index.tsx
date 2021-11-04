@@ -29,16 +29,16 @@ function Header() {
       </div>
       <div className={styles.baseInfoView}>
         <div className={styles.dataUpdateTime}>
-          <Iconfont type="iconshuaxin" size={14} />
+          <Iconfont type="icona-gengxin1" size={14} />
           &nbsp; 数据更新：
           {time}
         </div>
         <div className={styles.userInfo}>
-          <Iconfont type="iconyonghu-yuan" size={18} />
+          <Iconfont type="iconuser" size={18} />
           &nbsp; 用户名
         </div>
         <div className={styles.logout}>
-          <Iconfont type="iconlogout" size={20} />
+          <Iconfont type="iconsign-out" size={20} />
           &nbsp; 退出
         </div>
       </div>
