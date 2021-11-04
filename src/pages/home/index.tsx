@@ -4,6 +4,37 @@ import Amap from '@/common/components/Amap';
 import Page from '@/common/components/Page';
 import styles from './style.less';
 import {} from '@ant-design/pro-layout';
+import { LevelList } from '@/common/constant';
+// import Iconfont from '@/common/components/IconFont';
+
+function LevelBar() {
+  return (
+    <div className={styles.levelBar}>
+      <div>等级：</div>
+      {LevelList.map(({ color: backgroundColor, text }, index) => (
+        <div key={index} className={styles.levelBox}>
+          <span className={styles.colorTag} style={{ backgroundColor }} />
+          <span>{text}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ToolBar() {
+  const handleShowData = useCallback(() => {}, []);
+  const handleDownload = useCallback(() => {}, []);
+  return (
+    <div className={styles.toolBar}>
+      <div className={styles.toolBox} onClick={handleShowData}>
+        <span>数据</span>
+      </div>
+      <div className={styles.toolBox} onClick={handleDownload}>
+        <span>下载</span>
+      </div>
+    </div>
+  );
+}
 
 const { TabPane } = Tabs;
 
@@ -44,7 +75,7 @@ function Home() {
 
   useEffect(() => {
     // todo 获取数据
-    console.log(AmapRef.current);
+    console.log();
     // todo 描点
   }, [mapReady]);
 
@@ -53,6 +84,8 @@ function Home() {
       <TabPane tab="火险等级" key="1">
         <div className={styles.mapView}>
           <Amap mapId="HOMEMAP" onLoadCallback={drawDistrict} />
+          <LevelBar />
+          <ToolBar />
         </div>
       </TabPane>
       <TabPane tab="数据查询" key="2">
