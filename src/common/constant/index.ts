@@ -12,3 +12,10 @@ export enum Links {
   /* 服务专题-报告新增 */
   ServeReportAdd = '/serveReport/add',
 }
+export const LevelList = [
+  { color: '#43CF7C', text: '一级（低）', level: 1 },
+  { color: '#DCDCDC', text: '二级（较低）', level: 2 },
+  { color: '#E8DE1F', text: '三级（较高）', level: 3 },
+  { color: '#F87E06', text: '四级（高）', level: 4 },
+  { color: '#F60109', text: '五级（极高）', level: 5 },
+];
