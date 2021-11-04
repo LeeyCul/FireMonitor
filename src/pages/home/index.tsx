@@ -22,7 +22,9 @@ function Home() {
           </div>
         </TabPane>
         <TabPane tab="数据查询" key="2">
-          <Page>数据查询</Page>
+          <Page title="数据查询" icon="icondata">
+            数据查询
+          </Page>
         </TabPane>
         <TabPane tab="统计分析" key="3">
           <Page>统计分析</Page>
