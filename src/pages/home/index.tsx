@@ -5,6 +5,37 @@ import DataQuery from './dataQuery';
 import Statistic from './statistic';
 import styles from './style.less';
 import {} from '@ant-design/pro-layout';
+import { LevelList } from '@/common/constant';
+// import Iconfont from '@/common/components/IconFont';
+
+function LevelBar() {
+  return (
+    <div className={styles.levelBar}>
+      <div>等级：</div>
+      {LevelList.map(({ color: backgroundColor, text }, index) => (
+        <div key={index} className={styles.levelBox}>
+          <span className={styles.colorTag} style={{ backgroundColor }} />
+          <span>{text}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ToolBar() {
+  const handleShowData = useCallback(() => {}, []);
+  const handleDownload = useCallback(() => {}, []);
+  return (
+    <div className={styles.toolBar}>
+      <div className={styles.toolBox} onClick={handleShowData}>
+        <span>数据</span>
+      </div>
+      <div className={styles.toolBox} onClick={handleDownload}>
+        <span>下载</span>
+      </div>
+    </div>
+  );
+}
 
 function Home() {
   const AmapRef = useRef<any>();
@@ -42,13 +73,15 @@ function Home() {
 
   useEffect(() => {
     // todo 获取数据
-    console.log(AmapRef.current);
+    console.log();
     // todo 描点
   }, [mapReady]);
 
   return (
     <div className={styles.conainer} id="conainer">
       <Amap mapId="HOMEMAP" onLoadCallback={drawDistrict} />
+      <LevelBar />
+      <ToolBar />
     </div>
   );
 }
