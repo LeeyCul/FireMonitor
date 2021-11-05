@@ -81,7 +81,7 @@ function Home() {
   }, [mapReady]);
 
   return (
-    <Tabs defaultActiveKey="1" onChange={callback} className={styles.TabsView}>
+    <Tabs defaultActiveKey="2" onChange={callback} className={styles.TabsView}>
       <TabPane tab="火险等级" key="1">
         <div className={styles.mapView}>
           <Amap mapId="HOMEMAP" onLoadCallback={drawDistrict} />

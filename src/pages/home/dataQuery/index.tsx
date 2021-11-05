@@ -1,9 +1,57 @@
 import React from 'react';
-import { Table } from 'antd';
+import { Button, Divider } from 'antd';
+import CustomTable from '@/common/components/customTable';
 import Page from '@/common/components/Page';
 import styles from './style.less';
 
 function index() {
+  const columns = [
+    {
+      title: '报告名称',
+      dataIndex: 'name',
+      align: 'center',
+      // ellipsis: true,
+    },
+    {
+      title: '期数',
+      dataIndex: 'age',
+      align: 'center',
+    },
+    {
+      title: '报告类型',
+      dataIndex: 'addres1s',
+      align: 'center',
+    },
+    {
+      title: '签发人',
+      dataIndex: 'a1ge',
+      align: 'center',
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'addr12ess',
+      align: 'center',
+    },
+    {
+      title: '操作',
+      dataIndex: 'addr2ess',
+      align: 'center',
+      render: () => (
+        <div>
+          <Button type="primary">编辑</Button>
+          <Divider type="vertical" />
+          <Button type="primary" danger>
+            删除
+          </Button>
+        </div>
+      ),
+    },
+  ];
+  let data = [];
+  for (let i = 0; i < 100; i++) {
+    data.push({ name: i, key: i });
+  }
+
   return (
     <>
       <Page clsName={styles.dataQueryView}>
@@ -19,7 +67,11 @@ function index() {
           }
           style={{ paddingLeft: 0, margin: 0 }}
         >
-          1
+          <CustomTable
+            clsName={styles.tableView}
+            columns={columns}
+            dataSource={data}
+          />
         </Page>
       </Page>
     </>
