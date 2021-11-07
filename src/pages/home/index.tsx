@@ -3,8 +3,8 @@ import { Tabs } from 'antd';
 import Amap from '@/common/components/Amap';
 import Page from '@/common/components/Page';
 import DataQuery from './dataQuery';
+import Statistic from './statistic';
 import styles from './style.less';
-import {} from '@ant-design/pro-layout';
 import { LevelList } from '@/common/constant';
 // import Iconfont from '@/common/components/IconFont';
 
@@ -81,7 +81,7 @@ function Home() {
   }, [mapReady]);
 
   return (
-    <Tabs defaultActiveKey="2" onChange={callback} className={styles.TabsView}>
+    <Tabs defaultActiveKey="3" onChange={callback} className={styles.TabsView}>
       <TabPane tab="火险等级" key="1">
         <div className={styles.mapView}>
           <Amap mapId="HOMEMAP" onLoadCallback={drawDistrict} />
@@ -93,7 +93,7 @@ function Home() {
         <DataQuery />
       </TabPane>
       <TabPane tab="统计分析" key="3">
-        <Page>统计分析</Page>
+        <Statistic />
       </TabPane>
       <TabPane tab="案例库" key="4">
         <Page>案例库</Page>

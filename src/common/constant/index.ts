@@ -19,3 +19,29 @@ export const LevelList = [
   { color: '#F87E06', text: '四级（高）', level: 4 },
   { color: '#F60109', text: '五级（极高）', level: 5 },
 ];
+
+/* 图形 */
+export const figureList = [
+  {
+    title: '条形图',
+    list: [
+      { icon: 'iconzhuzhuangtu-jichu', key: 'bar1' },
+      { icon: 'icontiaoxingtu-duidie', key: 'bar2' },
+    ],
+  },
+  {
+    title: '折线图',
+    list: [
+      { icon: 'iconzhexiantu-duidie', key: 'line1' },
+      { icon: 'iconmianjitu-duidie', key: 'line2' },
+    ],
+  },
+  {
+    title: '饼图',
+    list: [
+      { icon: 'iconbingtu-huanxing', key: 'pie1' },
+      { icon: 'iconbingtu-jichu', key: 'pie2' },
+    ],
+  },
+  { title: '分布图', list: [{ icon: 'iconshijieditu', key: 'map' }] },
+];
