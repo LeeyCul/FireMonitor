@@ -1,0 +1,98 @@
+.dragView {
+  display: flex;
+  width: 100%;
+
+  .sigleView {
+    width: 156px;
+    margin-right: 10px;
+    border: 1px solid #efefef;
+  }
+
+  .contentView {
+    padding: 10px;
+
+    .title {
+      margin-bottom: 10px;
+      color: #333333;
+      font-weight: 400;
+      font-size: 14px;
+      font-family: SimHei;
+    }
+
+    .renderView {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 20px;
+      background: #e6e6e6;
+      border-radius: 4px;
+
+      .sigleItemT {
+        width: 90%;
+        margin-bottom: 10px;
+        background: #fff;
+      }
+    }
+
+    .active {
+      border: 1px solid #0095fb;
+    }
+
+    .picView {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .dataSourceText {
+      margin-left: 10px;
+      color: #333333;
+      font-weight: 400;
+      font-size: 14px;
+      font-family: SimHei;
+      cursor: pointer;
+    }
+  }
+
+  .titleView {
+    width: 100%;
+    height: 30px;
+    color: #fff;
+    line-height: 30px;
+    text-align: center;
+    background: #0095fb;
+    border-radius: 4;
+  }
+}
+
+.renderDataView {
+  height: 100%;
+  margin-bottom: 20px;
+
+  .selectArea {
+    position: relative;
+    width: 100%;
+    padding: 5px;
+    padding-bottom: 30px;
+    background: #e6e6e6;
+    border-radius: 4px;
+
+    &::before {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: inline-block;
+      width: 100%;
+      color: #999999;
+      font-size: 14px;
+      text-align: center;
+      content: '拖拽维度至此';
+    }
+  }
+
+  .selectAreaNo::before {
+    display: none;
+  }
+}

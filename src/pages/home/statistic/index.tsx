@@ -3,14 +3,15 @@ import { Button, Divider } from 'antd';
 import CustomTable from '@/common/components/CustomTable';
 import Page from '@/common/components/Page';
 import LevelTag from '@/common/components/LevelTag';
-import Dropdown from '@/common/components/DropdownCol';
+import Iconfont from '@/common/components/IconFont';
+import Drag from './Compontents/Drag';
 import Query from './Query';
 import styles from './style.less';
 
 function index() {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
-  const [columnsList, setColumnsList] = useState<any[]>([]);
-  const [slelectColKey, setSlelectColKey] = useState<string[]>();
+  // const [columnsList, setColumnsList] = useState<any[]>([]);
+  // const [slelectColKey, setSlelectColKey] = useState<string[]>();
   const columns = [
     {
       title: '站 号',
@@ -74,25 +75,20 @@ function index() {
   };
 
   useEffect(() => {
-    const columnsLists = columns.filter((item) => item?.isShow);
-    const slelectKey = columns
-      ?.map((item) => {
-        if (!item?.isShow) return;
-        return item?.dataIndex;
-      })
-      .filter(Boolean);
-
-    setColumnsList(columnsLists);
-    setSlelectColKey(slelectKey as string[]);
+    // const columnsLists = columns.filter(item => item?.isShow);
+    // const slelectKey = columns?.map(item => {
+    //   if (!item?.isShow) return;
+    //   return item?.dataIndex;
+    // }).filter(Boolean);
+    // setColumnsList(columnsLists);
+    // setSlelectColKey(slelectKey as string[]);
   }, []);
 
-  const selectColChange = useCallback((checkedValues: any[]) => {
-    const selectKeyList = columns.filter((item) =>
-      checkedValues.includes(item.dataIndex),
-    );
-    setColumnsList(selectKeyList);
-    setSlelectColKey(checkedValues);
-  }, []);
+  // const selectColChange = useCallback((checkedValues: any[]) => {
+  //   const selectKeyList = columns.filter(item => checkedValues.includes(item.dataIndex));
+  //   setColumnsList(selectKeyList);
+  //   setSlelectColKey(checkedValues);
+  // }, []);
 
   const MultipleExtendNode = () => (
     <div className={styles.extendNodeView}>
@@ -111,14 +107,7 @@ function index() {
         查询结果
         <span className={styles.updateTime}>更新于2021-11-12 12:00</span>
       </div>
-      <div>
-        显示列&emsp;
-        <Dropdown
-          columns={columns}
-          value={slelectColKey as string[]}
-          onChange={selectColChange}
-        />
-      </div>
+      <Button icon={<Iconfont type="iconlayout" size={14} />}>下载</Button>
     </div>
   );
 
@@ -128,13 +117,13 @@ function index() {
         <Query />
         <hr className={styles.line} />
         <Page
-          icon="iconsousuojieguo"
+          icon="iconshujuliebiao"
           title={<PageTitle />}
           style={{ paddingLeft: 0, margin: 0 }}
         >
           <CustomTable
             clsName={styles.tableView}
-            columns={columnsList}
+            columns={columns}
             dataSource={data}
             rowSelection={{
               type: 'checkbox',
@@ -144,6 +133,11 @@ function index() {
             multipleExtendNode={<MultipleExtendNode />}
           />
         </Page>
+      </Page>
+      <Page title="统计图" icon="icondata">
+        <div>
+          <Drag />
+        </div>
       </Page>
     </>
   );

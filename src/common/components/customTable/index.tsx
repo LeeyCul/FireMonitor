@@ -49,7 +49,6 @@ const CustomTable: React.FC<Props> = (props) => {
     ...item,
     className: styles.tabheadler,
   }));
-
   return (
     <div className={clsName}>
       {showAlert && (
