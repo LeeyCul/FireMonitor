@@ -9,6 +9,7 @@ export default [
     component: '@/layouts/index',
     routes: [
       { path: '/', component: '@/pages/home' },
+      { path: '/forecast', component: '@/pages/forecast' },
       {
         path: '/serveReport/list',
         component: '@/pages/serveReport/reportList',

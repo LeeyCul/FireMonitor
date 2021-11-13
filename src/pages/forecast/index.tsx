@@ -3,12 +3,12 @@ import { Radio, Tabs, DatePicker, Button, Cascader, Form } from 'antd';
 import cn from 'classnames';
 import Amap from '@/common/components/Amap';
 import Page from '@/common/components/Page';
-import ToolBar from '@/common/components/UseInMap/ToolBar';
 import styles from './style.less';
 import Iconfont from '@/common/components/IconFont';
 import { useForm } from 'antd/es/form/Form';
 import CustomMarkerHtml from '@/common/components/UseInMap/CustomMarker';
 import LevelBar from '@/common/components/UseInMap/LevelBar';
+import ToolBar from '@/common/components/UseInMap/ToolBar';
 import useMapShiftBar from '@/common/components/UseInMap/MapShiftBar';
 
 const mock = [
@@ -97,67 +97,18 @@ function FilterBar(props: any) {
     </div>
   );
 }
-
-function Home() {
-  const AmapRef = useRef<any>();
-  const mapRef = useRef<AMap.Map>();
-  const [mapReady, setMapReady] = useState<boolean>(false);
-  const drawDistrict = useCallback((AMap, map) => {
-    const district = new AMap.DistrictSearch({
-      extensions: 'all',
-      level: 'district',
-    });
-
-    AmapRef.current = Amap;
-    mapRef.current = map;
-    setMapReady(true);
-    district.search('四川', (_: any, result: any) => {
-      const bounds = result.districtList[0].boundaries;
-      const polygons = [];
-      if (bounds) {
-        for (let i = 0, l = bounds.length; i < l; i++) {
-          const polygon = new AMap.Polygon({
-            map,
-            strokeWeight: 1,
-            path: bounds[i],
-            fillOpacity: 0.7,
-            fillColor: '#CCF3FF',
-            strokeColor: '#CC66CC',
-          });
-          polygons.push(polygon);
-        }
-        // 地图自适应
-        map.setFitView();
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    // todo 获取数据
-    console.log();
-    // todo 描点
-  }, [mapReady]);
-
-  return (
-    <div className={styles.conainer} id="conainer">
-      <Amap mapId="HOMEMAP" onLoadCallback={drawDistrict} />
-      <LevelBar />
-      <ToolBar />
-    </div>
-  );
-}
-
 const { TabPane } = Tabs;
 
 function Home() {
   const AmapRef = useRef<any>();
   const mapRef = useRef<AMap.Map>();
-  const satelliteLayer = useRef<AMap.TileLayer.Satellite>();
   const preMarkerList = useRef<AMap.Marker[]>([]);
+  const satelliteLayer = useRef<AMap.TileLayer.Satellite>();
   const [isSatellite, MapShiftBar] = useMapShiftBar();
   const [mapReady, setMapReady] = useState<boolean>(false);
   const [hideLevel, setHideLevel] = useState<number[]>([]);
   const [markList, setMarkList] = useState<any[]>(mock);
+
   // 地图加载好后回调
   const handleLoadMap = useCallback((AMap, map) => {
     const district = new AMap.DistrictSearch({
@@ -241,7 +192,7 @@ function Home() {
     <Tabs defaultActiveKey="1" className={styles.TabsView}>
       <TabPane tab="火险等级" key="1">
         <div className={styles.mapView}>
-          <Amap mapId="HOMEMAP" onLoadCallback={handleLoadMap} />
+          <Amap mapId="FORECAST" onLoadCallback={handleLoadMap} />
           <LevelBar onChange={setHideLevel} />
           <ToolBar />
           <FilterBar onFilter={handleFilter} />
@@ -249,13 +200,12 @@ function Home() {
         </div>
       </TabPane>
       <TabPane tab="数据查询" key="2">
-        <DataQuery />
+        <Page title="数据查询" icon="icondata">
+          数据查询
+        </Page>
       </TabPane>
       <TabPane tab="统计分析" key="3">
-        <Statistic />
-      </TabPane>
-      <TabPane tab="案例库" key="4">
-        <Page>案例库</Page>
+        <Page>统计分析</Page>
       </TabPane>
     </Tabs>
   );
