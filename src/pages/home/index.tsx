@@ -1,15 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Radio, Tabs, DatePicker, Button, Cascader, Form } from 'antd';
 import cn from 'classnames';
+import { useForm } from 'antd/es/form/Form';
 import Amap from '@/common/components/Amap';
 import Page from '@/common/components/Page';
 import ToolBar from '@/common/components/UseInMap/ToolBar';
 import styles from './style.less';
 import Iconfont from '@/common/components/IconFont';
-import { useForm } from 'antd/es/form/Form';
 import CustomMarkerHtml from '@/common/components/UseInMap/CustomMarker';
 import LevelBar from '@/common/components/UseInMap/LevelBar';
 import useMapShiftBar from '@/common/components/UseInMap/MapShiftBar';
+import DataQuery from './dataQuery';
+import Statistic from './statistic';
+
+const { TabPane } = Tabs;
 
 const mock = [
   { temperature: 23, x: '102.54', y: '30.05', level: 1 },
@@ -101,57 +105,6 @@ function FilterBar(props: any) {
 function Home() {
   const AmapRef = useRef<any>();
   const mapRef = useRef<AMap.Map>();
-  const [mapReady, setMapReady] = useState<boolean>(false);
-  const drawDistrict = useCallback((AMap, map) => {
-    const district = new AMap.DistrictSearch({
-      extensions: 'all',
-      level: 'district',
-    });
-
-    AmapRef.current = Amap;
-    mapRef.current = map;
-    setMapReady(true);
-    district.search('四川', (_: any, result: any) => {
-      const bounds = result.districtList[0].boundaries;
-      const polygons = [];
-      if (bounds) {
-        for (let i = 0, l = bounds.length; i < l; i++) {
-          const polygon = new AMap.Polygon({
-            map,
-            strokeWeight: 1,
-            path: bounds[i],
-            fillOpacity: 0.7,
-            fillColor: '#CCF3FF',
-            strokeColor: '#CC66CC',
-          });
-          polygons.push(polygon);
-        }
-        // 地图自适应
-        map.setFitView();
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    // todo 获取数据
-    console.log();
-    // todo 描点
-  }, [mapReady]);
-
-  return (
-    <div className={styles.conainer} id="conainer">
-      <Amap mapId="HOMEMAP" onLoadCallback={drawDistrict} />
-      <LevelBar />
-      <ToolBar />
-    </div>
-  );
-}
-
-const { TabPane } = Tabs;
-
-function Home() {
-  const AmapRef = useRef<any>();
-  const mapRef = useRef<AMap.Map>();
   const satelliteLayer = useRef<AMap.TileLayer.Satellite>();
   const preMarkerList = useRef<AMap.Marker[]>([]);
   const [isSatellite, MapShiftBar] = useMapShiftBar();
@@ -192,7 +145,7 @@ function Home() {
   // 点击自定义标签
   const handleClickMarker = useCallback((e) => {
     const data = e.target.getExtData(); // 获取到对应坐标的数据
-    console.log(e);
+    console.log(e, data);
     // todo 点击显示弹窗内容
   }, []);
 
