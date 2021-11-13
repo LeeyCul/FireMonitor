@@ -1,0 +1,18 @@
+.custom-marker {
+  position: relative;
+  /* prettier-ignore */
+  width: 56PX;
+  /* prettier-ignore */
+  height: 24PX;
+  color: #fff;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.custom-marker-title {
+  height: 24px;
+  margin: 0;
+  padding-right: 10px;
+  font-size: 12px;
+  line-height: 24px;
+  text-align: right;
+}

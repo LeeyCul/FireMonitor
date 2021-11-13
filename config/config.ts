@@ -25,10 +25,10 @@ export default defineConfig({
       pathRewrite: { '^/api': '' },
     },
   },
-  extraPostCSSPlugins: [
-    pxtorem({
-      rootValue: 100,
-      propList: ['*'],
-    }),
-  ],
+  // extraPostCSSPlugins: [
+  //   pxtorem({
+  //     rootValue: 100,
+  //     propList: ['*'],
+  //   }),
+  // ],
 });

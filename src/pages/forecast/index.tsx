@@ -1,19 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Radio, Tabs, DatePicker, Button, Cascader, Form } from 'antd';
 import cn from 'classnames';
-import { useForm } from 'antd/es/form/Form';
 import Amap from '@/common/components/Amap';
 import Page from '@/common/components/Page';
-import ToolBar from '@/common/components/UseInMap/ToolBar';
 import styles from './style.less';
 import Iconfont from '@/common/components/IconFont';
+import { useForm } from 'antd/es/form/Form';
 import CustomMarkerHtml from '@/common/components/UseInMap/CustomMarker';
 import LevelBar from '@/common/components/UseInMap/LevelBar';
+import ToolBar from '@/common/components/UseInMap/ToolBar';
 import useMapShiftBar from '@/common/components/UseInMap/MapShiftBar';
-import DataQuery from './dataQuery';
-import Statistic from './statistic';
-
-const { TabPane } = Tabs;
 
 const mock = [
   { temperature: 23, x: '102.54', y: '30.05', level: 1 },
@@ -101,16 +97,18 @@ function FilterBar(props: any) {
     </div>
   );
 }
+const { TabPane } = Tabs;
 
 function Home() {
   const AmapRef = useRef<any>();
   const mapRef = useRef<AMap.Map>();
-  const satelliteLayer = useRef<AMap.TileLayer.Satellite>();
   const preMarkerList = useRef<AMap.Marker[]>([]);
+  const satelliteLayer = useRef<AMap.TileLayer.Satellite>();
   const [isSatellite, MapShiftBar] = useMapShiftBar();
   const [mapReady, setMapReady] = useState<boolean>(false);
   const [hideLevel, setHideLevel] = useState<number[]>([]);
   const [markList, setMarkList] = useState<any[]>(mock);
+
   // 地图加载好后回调
   const handleLoadMap = useCallback((AMap, map) => {
     const district = new AMap.DistrictSearch({
@@ -145,7 +143,7 @@ function Home() {
   // 点击自定义标签
   const handleClickMarker = useCallback((e) => {
     const data = e.target.getExtData(); // 获取到对应坐标的数据
-    console.log(e, data);
+    console.log(e);
     // todo 点击显示弹窗内容
   }, []);
 
@@ -194,7 +192,7 @@ function Home() {
     <Tabs defaultActiveKey="1" className={styles.TabsView}>
       <TabPane tab="火险等级" key="1">
         <div className={styles.mapView}>
-          <Amap mapId="HOMEMAP" onLoadCallback={handleLoadMap} />
+          <Amap mapId="FORECAST" onLoadCallback={handleLoadMap} />
           <LevelBar onChange={setHideLevel} />
           <ToolBar />
           <FilterBar onFilter={handleFilter} />
@@ -202,13 +200,12 @@ function Home() {
         </div>
       </TabPane>
       <TabPane tab="数据查询" key="2">
-        <DataQuery />
+        <Page title="数据查询" icon="icondata">
+          数据查询
+        </Page>
       </TabPane>
       <TabPane tab="统计分析" key="3">
-        <Statistic />
-      </TabPane>
-      <TabPane tab="案例库" key="4">
-        <Page>案例库</Page>
+        <Page>统计分析</Page>
       </TabPane>
     </Tabs>
   );

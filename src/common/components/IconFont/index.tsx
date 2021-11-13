@@ -10,7 +10,7 @@ interface Props {
 
 function Iconfont({ type, style, size, onClick }: Props) {
   const IconUrl = createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_2911369_l1s8pzj8k0l.js', // 在 iconfont.cn 上生成
+    scriptUrl: '//at.alicdn.com/t/font_2911369_0b32et2mkrrs.js', // 在 iconfont.cn 上生成
   });
   return (
     <IconUrl
