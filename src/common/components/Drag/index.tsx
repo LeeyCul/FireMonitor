@@ -3,7 +3,7 @@ import cls from 'classnames';
 import _ from 'lodash';
 import Iconfont from '@/common/components/IconFont';
 import { figureList } from '@/common/constant';
-import DataItem from '../DragItem';
+import DataItem from './DragItem';
 import styles from './style.less';
 
 interface RenderViewProps {
@@ -20,21 +20,22 @@ interface RenderDataViewProps {
   clssName?: string;
 }
 
-const dataSource = [
-  { icon: 'iconcalendar', text: '区 域', id: 1, status: 'a' },
-  { icon: 'iconcalendar', text: '日 期', id: 2, status: 'a' },
-  { icon: 'iconcalendar', text: '最高气温', id: 3, status: 'a' },
-];
+interface Props {
+  dataSource: any[];
+  onChange: (lend: string[], dataValue: string[], chart: string) => void;
+}
 
 const STATUS_CODE: any = {
   STATUS_legend: '图例',
   STATUS_dataValue: '数据值',
 };
 
-function Drag() {
+function Drag({ dataSource, onChange }: Props) {
   const [active, setActive] = useState<string>('bar1');
   const [activeId, setActiveID] = useState<number | string | null>();
   const [data, setData] = useState<any[]>(dataSource);
+  const [lend, setLend] = useState<string[]>([]);
+  const [dataValue, setDataValue] = useState<string[]>([]);
 
   const RenderTitle = ({ title }: { title: string }) => (
     <div className={styles.titleView}>{title}</div>
@@ -66,7 +67,7 @@ function Drag() {
     clssName,
   }: RenderDataViewProps) => (
     <div
-      className={styles.renderDataView}
+      className={cls(styles.renderDataView)}
       onDragOver={(e) => {
         e.preventDefault();
       }}
@@ -82,6 +83,7 @@ function Drag() {
 
   const handleClick = (key: string) => {
     setActive(key);
+    onChange(lend, dataValue, key);
   };
 
   const handleDragStart = (id: number | string) => {
@@ -94,6 +96,15 @@ function Drag() {
       record.status = status;
       setData(data);
     }
+    const legend = data
+      ?.filter((item) => item.status === 'STATUS_legend')
+      ?.map((item) => item?.filed);
+    const dataValue = data
+      ?.filter((item) => item.status === 'STATUS_dataValue')
+      ?.map((item) => item?.filed);
+    setLend(legend);
+    setDataValue(dataValue);
+    onChange(legend, dataValue, active);
   };
 
   const handleClickDel = (id: string | number) => {
@@ -110,7 +121,7 @@ function Drag() {
         <div className={styles.contentView}>
           <RenderDataView clssName={styles.selectAreaNo} status="a">
             {data
-              .filter((item) => item?.status === 'a')
+              ?.filter((item) => item?.status === 'a')
               ?.map((item) => (
                 <DataItem
                   key={item?.id}
@@ -128,7 +139,7 @@ function Drag() {
           {Object.keys(STATUS_CODE).map((code) => (
             <RenderDataView key={code} title={STATUS_CODE[code]} status={code}>
               {data
-                .filter((item) => item?.status === code)
+                ?.filter((item) => item?.status === code)
                 ?.map((subItem) => {
                   const { text, id } = subItem;
                   return (

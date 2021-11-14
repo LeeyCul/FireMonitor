@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import dayjs from 'dayjs';
+import { history } from 'umi';
 import Iconfont from '../../common/components/IconFont';
+import { Links } from '@/common/constant';
 import logo from '@/common/images/logo.png';
 import styles from './style.less';
 
@@ -37,7 +39,10 @@ function Header() {
           <Iconfont type="iconuser" size={18} />
           &nbsp; 用户名
         </div>
-        <div className={styles.logout}>
+        <div
+          className={styles.logout}
+          onClick={() => history.push(Links.Login)}
+        >
           <Iconfont type="iconsign-out" size={20} />
           &nbsp; 退出
         </div>

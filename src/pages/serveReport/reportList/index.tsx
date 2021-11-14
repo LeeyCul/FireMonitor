@@ -1,8 +1,10 @@
 import React from 'react';
-import { Button, Table, Divider } from 'antd';
+import { Button, Divider } from 'antd';
 import { Link } from 'umi';
-import { ColumnsType } from 'antd/lib/table';
 import Page from '@/common/components/Page';
+import CustomTable from '@/common/components/CustomTable';
+import Iconfont from '@/common/components/IconFont';
+import Query from './Query';
 import { Links } from '@/common/constant';
 import styles from './style.less';
 
@@ -59,38 +61,38 @@ function index() {
       );
     },
   };
+  const PageTitle = () => (
+    <div className={styles.pageTitleView}>
+      <div>专题报告</div>
+      <div>
+        <Link to={Links.ServeReportAdd}>
+          <Button type="primary" icon={<Iconfont type="iconadd" size={14} />}>
+            新建
+          </Button>
+        </Link>
+        &emsp;
+        <Button icon={<Iconfont type="iconlayout" size={14} />}>下载</Button>
+      </div>
+    </div>
+  );
   return (
-    <Page>
-      <div className={styles.conainerView}>
-        <div className={styles.titleView}>
-          <Link to={Links.ServeReportAdd}>
-            <Button type="primary">新建</Button>
-          </Link>
-          <Button className={styles.btnStyle}>下载</Button>
-        </div>
-        <Table
+    <Page clsName={styles.conainerView}>
+      <Query />
+      <hr className={styles.line} />
+      <Page
+        icon="iconimage-text"
+        title={<PageTitle />}
+        style={{ paddingLeft: 0, margin: 0 }}
+      >
+        <CustomTable
+          columns={columns}
+          dataSource={[]}
           rowSelection={{
             type: 'checkbox',
             ...rowSelection,
           }}
-          pagination={{ position: ['bottomCenter'] }}
-          columns={columns as ColumnsType<any>}
-          dataSource={[
-            {
-              key: '1',
-              name: 'John Brown111111111111111111111111',
-              age: 32,
-              address: 'New York No. 1 Lake Park',
-            },
-            {
-              key: '2',
-              name: 'Jim Green',
-              age: 42,
-              address: 'London No. 1 Lake Park',
-            },
-          ]}
         />
-      </div>
+      </Page>
     </Page>
   );
 }
