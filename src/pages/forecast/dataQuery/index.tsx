@@ -3,23 +3,14 @@ import { Button, Divider } from 'antd';
 import CustomTable from '@/common/components/CustomTable';
 import Page from '@/common/components/Page';
 import LevelTag from '@/common/components/LevelTag';
-import Iconfont from '@/common/components/IconFont';
-import Drag from '@/common/components/Drag';
-import { Bar } from '@/common/components/Echarts';
+import Dropdown from '@/common/components/DropdownCol';
 import Query from './Query';
 import styles from './style.less';
 
-const dataSource = [
-  { text: '区 域', filed: 'area', id: 1, status: 'a' },
-  { text: '日 期', filed: 'time', id: 2, status: 'a' },
-  { text: '最高气温', filed: 'max', id: 3, status: 'a' },
-];
-
 function index() {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
-  const [activeChaets, setActiveChaets] = useState<string>('bar1');
-  // const [columnsList, setColumnsList] = useState<any[]>([]);
-  // const [slelectColKey, setSlelectColKey] = useState<string[]>();
+  const [columnsList, setColumnsList] = useState<any[]>([]);
+  const [slelectColKey, setSlelectColKey] = useState<string[]>();
   const columns = [
     {
       title: '站 号',
@@ -83,20 +74,25 @@ function index() {
   };
 
   useEffect(() => {
-    // const columnsLists = columns.filter(item => item?.isShow);
-    // const slelectKey = columns?.map(item => {
-    //   if (!item?.isShow) return;
-    //   return item?.dataIndex;
-    // }).filter(Boolean);
-    // setColumnsList(columnsLists);
-    // setSlelectColKey(slelectKey as string[]);
+    const columnsLists = columns.filter((item) => item?.isShow);
+    const slelectKey = columns
+      ?.map((item) => {
+        if (!item?.isShow) return;
+        return item?.dataIndex;
+      })
+      .filter(Boolean);
+
+    setColumnsList(columnsLists);
+    setSlelectColKey(slelectKey as string[]);
   }, []);
 
-  // const selectColChange = useCallback((checkedValues: any[]) => {
-  //   const selectKeyList = columns.filter(item => checkedValues.includes(item.dataIndex));
-  //   setColumnsList(selectKeyList);
-  //   setSlelectColKey(checkedValues);
-  // }, []);
+  const selectColChange = useCallback((checkedValues: any[]) => {
+    const selectKeyList = columns.filter((item) =>
+      checkedValues.includes(item.dataIndex),
+    );
+    setColumnsList(selectKeyList);
+    setSlelectColKey(checkedValues);
+  }, []);
 
   const MultipleExtendNode = () => (
     <div className={styles.extendNodeView}>
@@ -115,20 +111,16 @@ function index() {
         查询结果
         <span className={styles.updateTime}>更新于2021-11-12 12:00</span>
       </div>
-      <Button icon={<Iconfont type="iconlayout" size={14} />}>下载</Button>
+      <div>
+        显示列&emsp;
+        <Dropdown
+          columns={columns}
+          value={slelectColKey as string[]}
+          onChange={selectColChange}
+        />
+      </div>
     </div>
   );
-
-  const renderEcharts = () => {
-    switch (activeChaets) {
-      case 'bar1':
-        return <Bar />;
-      case 'bar2':
-        return <Bar direction="level" />;
-      default:
-        <Bar />;
-    }
-  };
 
   return (
     <>
@@ -136,13 +128,13 @@ function index() {
         <Query />
         <hr className={styles.line} />
         <Page
-          icon="iconshujuliebiao"
+          icon="iconsousuojieguo"
           title={<PageTitle />}
           style={{ paddingLeft: 0, margin: 0 }}
         >
           <CustomTable
             clsName={styles.tableView}
-            columns={columns}
+            columns={columnsList}
             dataSource={data}
             rowSelection={{
               type: 'checkbox',
@@ -152,19 +144,6 @@ function index() {
             multipleExtendNode={<MultipleExtendNode />}
           />
         </Page>
-      </Page>
-      <Page title="统计图" icon="icondata">
-        <div className={styles.echartsView}>
-          <Drag
-            dataSource={dataSource}
-            onChange={(a, b, c) => {
-              setActiveChaets(c);
-              console.log('a', a, b, c);
-            }}
-          />
-          {renderEcharts()}
-          {/* <Bar /> */}
-        </div>
       </Page>
     </>
   );

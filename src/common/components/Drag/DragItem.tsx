@@ -1,6 +1,5 @@
-import React from 'react';
 import IconFont from '@/common/components/IconFont';
-import styles from './style.less';
+import styles from './dragItem.less';
 
 interface Props {
   title: string;

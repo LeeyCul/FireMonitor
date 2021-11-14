@@ -28,6 +28,8 @@
     "@commitlint/config-conventional": "^13.2.0",
     "@types/amap-js-api": "^1.4.10",
     "dayjs": "^1.10.7",
+    "echarts": "^5.2.2",
+    "echarts-for-react": "^3.0.2",
     "eslint-plugin-typescript": "^0.14.0",
     "lodash": "^4.17.21",
     "postcss-pxtorem": "^5.1.1",

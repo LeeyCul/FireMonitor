@@ -11,6 +11,8 @@ export enum Links {
   ServeReportList = '/serveReport/list',
   /* 服务专题-报告新增 */
   ServeReportAdd = '/serveReport/add',
+  /* login */
+  Login = '/login',
 }
 export const LevelList = [
   { color: '#43CF7C', text: '一级（低）', level: 1 },

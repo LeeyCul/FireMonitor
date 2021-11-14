@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Radio, Tabs, DatePicker, Button, Cascader, Form } from 'antd';
 import cn from 'classnames';
+import { useForm } from 'antd/es/form/Form';
 import Amap from '@/common/components/Amap';
-import Page from '@/common/components/Page';
 import styles from './style.less';
 import Iconfont from '@/common/components/IconFont';
-import { useForm } from 'antd/es/form/Form';
 import CustomMarkerHtml from '@/common/components/UseInMap/CustomMarker';
 import LevelBar from '@/common/components/UseInMap/LevelBar';
 import ToolBar from '@/common/components/UseInMap/ToolBar';
 import useMapShiftBar from '@/common/components/UseInMap/MapShiftBar';
+import Query from './dataQuery';
+import Statistic from './statistic';
 
 const mock = [
   { temperature: 23, x: '102.54', y: '30.05', level: 1 },
@@ -154,9 +155,8 @@ function Home() {
   // 切换卫星/行政图
   useEffect(() => {
     if (mapReady) {
-      const layer =
-        satelliteLayer.current ||
-        (satelliteLayer.current = new AmapRef.current.TileLayer.Satellite());
+      const layer = satelliteLayer.current
+        || (satelliteLayer.current = new AmapRef.current.TileLayer.Satellite());
       if (isSatellite) {
         mapRef.current?.add(layer);
       } else {
@@ -169,8 +169,7 @@ function Home() {
     if (mapReady) {
       mapRef.current?.remove(preMarkerList.current);
       preMarkerList.current.map((instance) =>
-        instance.off('click', handleClickMarker),
-      );
+        instance.off('click', handleClickMarker));
       const markerList = markList
         .filter((item) => hideLevel.every((hide) => item.level !== hide))
         .map(
@@ -200,12 +199,10 @@ function Home() {
         </div>
       </TabPane>
       <TabPane tab="数据查询" key="2">
-        <Page title="数据查询" icon="icondata">
-          数据查询
-        </Page>
+        <Query />
       </TabPane>
       <TabPane tab="统计分析" key="3">
-        <Page>统计分析</Page>
+        <Statistic />
       </TabPane>
     </Tabs>
   );
