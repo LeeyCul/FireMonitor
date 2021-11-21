@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button, Divider } from 'antd';
+import { useRequest } from 'ahooks';
 import CustomTable from '@/common/components/CustomTable';
 import Page from '@/common/components/Page';
 import LevelTag from '@/common/components/LevelTag';
@@ -8,18 +9,24 @@ import Drag from '@/common/components/Drag';
 import { Bar } from '@/common/components/Echarts';
 import Query from './Query';
 import styles from './style.less';
+import { getIndicator } from '@/common/api';
 
-const dataSource = [
-  { text: '区 域', filed: 'area', id: 1, status: 'a' },
-  { text: '日 期', filed: 'time', id: 2, status: 'a' },
-  { text: '最高气温', filed: 'max', id: 3, status: 'a' },
-];
+// const dataSource = [
+//   { text: '区 域', filed: 'area', id: 1, status: 'a' },
+//   { text: '日 期', filed: 'time', id: 2, status: 'a' },
+//   { text: '最高气温', filed: 'max', id: 3, status: 'a' },
+// ];
 
 function index() {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [activeChaets, setActiveChaets] = useState<string>('bar1');
   // const [columnsList, setColumnsList] = useState<any[]>([]);
   // const [slelectColKey, setSlelectColKey] = useState<string[]>();
+  const { data: indicatorData } = useRequest<any>(() => getIndicator(), {
+    formatResult: (res: any) =>
+      res?.payload?.model && JSON.parse(res?.payload?.model),
+  });
+
   const columns = [
     {
       title: '站 号',
@@ -82,15 +89,11 @@ function index() {
     setSelectedRows(selectedRows);
   };
 
-  useEffect(() => {
-    // const columnsLists = columns.filter(item => item?.isShow);
-    // const slelectKey = columns?.map(item => {
-    //   if (!item?.isShow) return;
-    //   return item?.dataIndex;
-    // }).filter(Boolean);
-    // setColumnsList(columnsLists);
-    // setSlelectColKey(slelectKey as string[]);
-  }, []);
+  // useEffect(async () => {
+  //   const data = await getIndicator();
+  //   const { payload } = data;
+  //   console.log('data', JSON.parse(payload.model));
+  // }, []);
 
   // const selectColChange = useCallback((checkedValues: any[]) => {
   //   const selectKeyList = columns.filter(item => checkedValues.includes(item.dataIndex));
@@ -126,7 +129,7 @@ function index() {
       case 'bar2':
         return <Bar direction="level" />;
       default:
-        <Bar />;
+        return <Bar />;
     }
   };
 
@@ -156,7 +159,8 @@ function index() {
       <Page title="统计图" icon="icondata">
         <div className={styles.echartsView}>
           <Drag
-            dataSource={dataSource}
+            dataSource={indicatorData}
+            // a={{ 年份: { sqlType: 'BIGINT', visualType: 'number', modelType: 'category' }, 专利技术: { sqlType: 'BIGINT', visualType: 'number', modelType: 'value' }, 知识产权技术: { sqlType: 'BIGINT', visualType: 'number', modelType: 'value' }, 标准信息: { sqlType: 'BIGINT', visualType: 'number', modelType: 'value' }, 其他成果: { sqlType: 'BIGINT', visualType: 'number', modelType: 'value' } }}
             onChange={(a, b, c) => {
               setActiveChaets(c);
               console.log('a', a, b, c);

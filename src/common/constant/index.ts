@@ -22,6 +22,22 @@ export const LevelList = [
   { color: '#F60109', text: '五级（极高）', level: 5 },
 ];
 
+/**
+ * 数据绑定类型
+ */
+export const STATUS_CODE: any = {
+  category: '维度',
+  value: '指标',
+};
+
+/**
+ * 数据源
+ */
+export const DATASOUCE_CODE: any = {
+  category: '分类型',
+  value: '指标型',
+};
+
 /* 图形 */
 export const figureList = [
   {
