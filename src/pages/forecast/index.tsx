@@ -11,6 +11,7 @@ import ToolBar from '@/common/components/UseInMap/ToolBar';
 import useMapShiftBar from '@/common/components/UseInMap/MapShiftBar';
 import Query from './dataQuery';
 import Statistic from './statistic';
+import useMarkerTooltip from '@/common/components/UseInMap/useMarkerTooltip';
 
 const mock = [
   { temperature: 23, x: '102.54', y: '30.05', level: 1 },
@@ -19,11 +20,11 @@ const mock = [
   { temperature: 23, x: '100.54', y: '30.05', level: 4 },
   { temperature: 23, x: '102.54', y: '28.05', level: 5 },
 ];
-
 const areaOptions = [
   { label: '行政区域', value: 'xx' },
   { label: '地理分区', value: 'yy' },
 ];
+const mapId = 'FORECAST';
 
 function FilterBar(props: any) {
   const { onFilter } = props;
@@ -109,6 +110,7 @@ function Home() {
   const [mapReady, setMapReady] = useState<boolean>(false);
   const [hideLevel, setHideLevel] = useState<number[]>([]);
   const [markList, setMarkList] = useState<any[]>(mock);
+  const [dom, handleShow] = useMarkerTooltip(mapId);
 
   // 地图加载好后回调
   const handleLoadMap = useCallback((AMap, map) => {
@@ -142,11 +144,16 @@ function Home() {
   }, []);
 
   // 点击自定义标签
-  const handleClickMarker = useCallback((e) => {
-    const data = e.target.getExtData(); // 获取到对应坐标的数据
-    console.log(e);
-    // todo 点击显示弹窗内容
-  }, []);
+  const handleClickMarker = useCallback(
+    (e) => {
+      const data = e.target.getExtData(); // 获取到对应坐标的数据
+      const { x, y, offsetX, offsetY } = e.originEvent;
+      console.log(e.originEvent);
+      handleShow({ x: x - offsetX, y: y - offsetY, data });
+      // todo 点击显示弹窗内容
+    },
+    [handleShow],
+  );
 
   const handleFilter = useCallback((search) => {
     // todo request
@@ -155,8 +162,9 @@ function Home() {
   // 切换卫星/行政图
   useEffect(() => {
     if (mapReady) {
-      const layer = satelliteLayer.current
-        || (satelliteLayer.current = new AmapRef.current.TileLayer.Satellite());
+      const layer =
+        satelliteLayer.current ||
+        (satelliteLayer.current = new AmapRef.current.TileLayer.Satellite());
       if (isSatellite) {
         mapRef.current?.add(layer);
       } else {
@@ -169,7 +177,8 @@ function Home() {
     if (mapReady) {
       mapRef.current?.remove(preMarkerList.current);
       preMarkerList.current.map((instance) =>
-        instance.off('click', handleClickMarker));
+        instance.off('click', handleClickMarker),
+      );
       const markerList = markList
         .filter((item) => hideLevel.every((hide) => item.level !== hide))
         .map(
@@ -191,11 +200,12 @@ function Home() {
     <Tabs defaultActiveKey="1" className={styles.TabsView}>
       <TabPane tab="火险等级" key="1">
         <div className={styles.mapView}>
-          <Amap mapId="FORECAST" onLoadCallback={handleLoadMap} />
+          <Amap mapId={mapId} onLoadCallback={handleLoadMap} />
           <LevelBar onChange={setHideLevel} />
           <ToolBar />
           <FilterBar onFilter={handleFilter} />
           {MapShiftBar}
+          {dom}
         </div>
       </TabPane>
       <TabPane tab="数据查询" key="2">
