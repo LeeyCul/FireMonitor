@@ -10,8 +10,8 @@ export default function useMapShiftBar(): [
   const handleShit = useCallback((value) => {
     setSatellite(value);
   }, []);
-  const dom = useMemo(() => {
-    return (
+  const dom = useMemo(
+    () => (
       <div className={styles.mapBar}>
         <div className={styles.mapBox} onClick={handleShit.bind(null, false)}>
           <Iconfont
@@ -28,8 +28,9 @@ export default function useMapShiftBar(): [
           <p style={{ color: isSatellite ? '#0095FB' : undefined }}>卫星图</p>
         </div>
       </div>
-    );
-  }, [isSatellite]);
+    ),
+    [isSatellite],
+  );
 
   return [isSatellite, dom];
 }

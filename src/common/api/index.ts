@@ -33,3 +33,23 @@ export async function getCityList(params?: any) {
     params: { pid: 510000 },
   });
 }
+
+/**
+ * 根据区域获取日数据
+ */
+export async function getQueryDay(params?: any) {
+  return request('v1/app/data/query/day', {
+    method: 'get',
+    params,
+  });
+}
+
+/**
+ * 获取单个站点数据
+ */
+export async function getDayRange(params?: any) {
+  return request('v1/app/data/query/day-range', {
+    method: 'get',
+    params,
+  });
+}

@@ -10,21 +10,23 @@ type Info = {
 };
 
 function LevelTag({
-  level = 0,
+  level = 1,
   text = '一级',
   color = '#43CF7C',
 }: Props & Info) {
   const levelTagObj = [
-    { text: '一级', color: '#43CF7C' },
-    { text: '二级', color: '#2E5AFA' },
+    { text: '一级', color: '#72B047' },
+    { text: '二级', color: '#DCDCDC' },
     { text: '三级', color: '#E8DE1F' },
+    { text: '四级', color: '#F87E06' },
+    { text: '五级', color: '#F60109' },
   ];
   const renderText = React.useMemo(() => {
     let infoObj: Info;
     if (level) {
       infoObj = {
-        text: levelTagObj[level]?.text,
-        color: levelTagObj[level]?.color,
+        text: levelTagObj?.[level - 1]?.text,
+        color: levelTagObj?.[level - 1]?.color,
       };
     } else {
       infoObj = {

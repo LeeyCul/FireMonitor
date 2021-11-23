@@ -4,6 +4,7 @@ import * as apis from '@/common/api';
 export interface IState {
   resultList: any[];
   columns: any[];
+  fireList: any[];
 }
 
 interface IDetection {
@@ -12,9 +13,11 @@ interface IDetection {
   subscriptions: {};
   effects: {
     getChartsFetchData: Effect;
+    getQueryDayData: Effect;
   };
   reducers: {
     setCharsData: Reducer;
+    setFireList: Reducer;
   };
 }
 const Detection: IDetection = {
@@ -22,6 +25,7 @@ const Detection: IDetection = {
   state: {
     resultList: [],
     columns: [],
+    fireList: [],
   },
   subscriptions: {},
   effects: {
@@ -30,6 +34,10 @@ const Detection: IDetection = {
       const { resultList, columns } = data || {};
       yield put({ type: 'setCharsData', payload: { resultList, columns } });
     },
+    *getQueryDayData({ payload: query }, { call, put }) {
+      const { data } = yield call(apis.getQueryDay, query);
+      yield put({ type: 'setFireList', payload: data });
+    },
   },
   reducers: {
     setCharsData(state, { payload: { resultList, columns } }) {
@@ -37,6 +45,12 @@ const Detection: IDetection = {
         ...state,
         resultList: resultList?.length ? resultList : [],
         columns: columns?.length ? columns : [],
+      };
+    },
+    setFireList(state, { payload }) {
+      return {
+        ...state,
+        fireList: payload,
       };
     },
   },

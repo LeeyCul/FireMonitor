@@ -150,6 +150,7 @@ function Home() {
       const { x, y, offsetX, offsetY } = e.originEvent;
       console.log(e.originEvent);
       handleShow({ x: x - offsetX, y: y - offsetY, data });
+
       // todo 点击显示弹窗内容
     },
     [handleShow],

@@ -12,6 +12,7 @@ import LevelBar from '@/common/components/UseInMap/LevelBar';
 import useMapShiftBar from '@/common/components/UseInMap/MapShiftBar';
 import DataQuery from './dataQuery';
 import Statistic from './statistic';
+import { getDayRange, getQueryDay } from '@/common/api';
 
 const { TabPane } = Tabs;
 
