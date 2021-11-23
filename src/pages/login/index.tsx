@@ -1,10 +1,12 @@
-import React from 'react';
 import { Form, Input, Button } from 'antd';
+import { useDispatch } from 'umi';
 import styles from './style.less';
 
 function Login() {
+  const dispath = useDispatch();
+
   const onFinish = (values: any) => {
-    console.log('Success:', values);
+    dispath({ type: 'login/loginIn', payload: values });
   };
 
   return (

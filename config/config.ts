@@ -19,10 +19,10 @@ export default defineConfig({
     loading: '@/common/components/Loading',
   },
   proxy: {
-    '/api': {
-      target: 'https://restapi.amap.com/v3/',
+    '/v1': {
+      target: 'http://iot.feelbang.com:8088',
       changeOrigin: true,
-      pathRewrite: { '^/api': '' },
+      pathRewrite: { '^/v1': '' },
     },
   },
   // extraPostCSSPlugins: [
