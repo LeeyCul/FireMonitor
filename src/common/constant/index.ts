@@ -38,6 +38,20 @@ export const DATASOUCE_CODE: any = {
   value: '指标型',
 };
 
+export enum ChartsType {
+  Bar1 = 'bar1',
+  Bar2 = 'bar2',
+  Line1 = 'line1',
+  Line2 = 'line2',
+  Pie1 = 'pie1',
+  Pie2 = 'pie2',
+}
+
+export enum columnsType {
+  BIGINT = 'BIGINT',
+  DECIMAL = 'DECIMAL',
+}
+
 /* 图形 */
 export const figureList = [
   {
@@ -61,5 +75,5 @@ export const figureList = [
       { icon: 'iconbingtu-jichu', key: 'pie2' },
     ],
   },
-  { title: '分布图', list: [{ icon: 'iconshijieditu', key: 'map' }] },
+  // { title: '分布图', list: [{ icon: 'iconshijieditu', key: 'map' }] },
 ];

@@ -3,8 +3,8 @@ import React, {
   useState,
   ReactNode,
   useEffect,
-  useMemo,
   useCallback,
+  memo,
 } from 'react';
 import cls from 'classnames';
 import { message } from 'antd';
@@ -115,7 +115,7 @@ function Drag({ dataSource, onChange }: Props) {
     setCategory(category as string[]);
     setDataValue(valueList as string[]);
     onChange(category as string[], valueList as string[], active);
-  }, [data]);
+  }, [data, active]);
 
   const onDrop = (status: string | number) => {
     let tempData = data;
@@ -221,4 +221,4 @@ function Drag({ dataSource, onChange }: Props) {
   );
 }
 
-export default Drag;
+export default memo(Drag);

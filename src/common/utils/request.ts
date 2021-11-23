@@ -39,7 +39,7 @@ const errorHandler = (error: any) => {
             content: '当前登录已过期，请重新登陆！',
             okText: '确定',
             onOk() {
-              // history.push('/login');
+              history.push('/login');
             },
           });
         }
@@ -64,14 +64,14 @@ const request = extend({
 request.interceptors.request.use((url: string, options: any) => {
   let token = sessionStorage.getItem('token');
   if (!token) {
-    // history.push('/login');
+    history.push('/login');
   }
   const headers = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    'X-Authorization': `Bearer ${token}`,
+    // Authorization: `Bearer ${token}`,
     Authorization:
-      'Bearer eyJhbGciOiJIUzUxMiJ9.eyJ0b2tlbl9jcmVhdGVfdGltZSI6MTYzNzQ5OTQwNTgxMiwic3ViIjoiYWRtaW4iLCJ0b2tlbl91c2VyX25hbWUiOiJhZG1pbiIsImV4cCI6MTYzNzUwMTIwNSwidG9rZW5fdXNlcl9wYXNzd29yZCI6IiQyYSQxMCRHMFhkZGZrVzNlRGNpZWZLU0dGTm1lZDBNN0dWemgwLnA0ajQ0N2dMc3k2Uy83TEZobjV4ZSJ9.cwyINGil2UleEli3KLOQoWne_QhkOgCvf2H6ayUPm49GOkQVTWR-rG93OAaZCnUMpSpGt5GTRtOKBK5nDWVPeQ',
+      'Bearer eyJhbGciOiJIUzUxMiJ9.eyJ0b2tlbl9jcmVhdGVfdGltZSI6MTYzNzY1NTIxNzc5Mywic3ViIjoiYWRtaW4iLCJ0b2tlbl91c2VyX25hbWUiOiJhZG1pbiIsImV4cCI6MTYzNzY1NzAxNywidG9rZW5fdXNlcl9wYXNzd29yZCI6IiQyYSQxMCRHMFhkZGZrVzNlRGNpZWZLU0dGTm1lZDBNN0dWemgwLnA0ajQ0N2dMc3k2Uy83TEZobjV4ZSJ9.imPKaPeiZH2aDm8tc9q_pBEO_QvT3zOIjny8ifKARxGiA4qEATKfUFWQTEogLv06FkEf-WLJ4AVVQ3XZuT58Sg',
   };
   return {
     url: encodeURI(url),

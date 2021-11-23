@@ -1,14 +1,26 @@
 import ReactECharts from 'echarts-for-react';
+import { useMemo } from 'react';
 
 interface Props {
   seriesData?: any[];
   direction?: 'level' | 'vertical';
-  napeData?: Array<string | number>;
+  categoryData?: Array<string | number>;
 }
 
-function index({ seriesData, direction = 'vertical', napeData }: Props) {
+function index({ seriesData, direction = 'level', categoryData }: Props) {
+  const clearData = useMemo(
+    () =>
+      seriesData?.map((item) => ({
+        ...item,
+        data: item?.value,
+        type: 'bar',
+      })),
+    [seriesData],
+  );
+
   return (
     <ReactECharts
+      notMerge
       style={{ width: '100%' }}
       option={{
         tooltip: {
@@ -17,9 +29,7 @@ function index({ seriesData, direction = 'vertical', napeData }: Props) {
             type: 'shadow',
           },
         },
-        legend: {
-          data: ['日期', '区域'],
-        },
+        legend: {},
         barWidth: 20,
         grid: {
           left: '3%',
@@ -28,26 +38,15 @@ function index({ seriesData, direction = 'vertical', napeData }: Props) {
           containLabel: true,
         },
         xAxis: {
-          type: direction === 'vertical' ? 'category' : 'value',
-          data: direction === 'vertical' ? ['日期', '区域', '温度'] : [],
+          type: direction === 'level' ? 'category' : 'value',
+          data: direction === 'level' ? categoryData : [],
           boundaryGap: [0, 0.01],
         },
         yAxis: {
-          type: direction === 'level' ? 'category' : 'value',
-          data: direction === 'level' ? ['日期', '区域', '温度'] : [],
+          type: direction === 'vertical' ? 'category' : 'value',
+          data: direction === 'vertical' ? categoryData : [],
         },
-        series: [
-          {
-            name: '日期',
-            type: 'bar',
-            data: [18203, 23489, 29034],
-          },
-          {
-            name: '区域',
-            type: 'bar',
-            data: [19325, 23438, 31000],
-          },
-        ],
+        series: clearData || [],
       }}
     />
   );

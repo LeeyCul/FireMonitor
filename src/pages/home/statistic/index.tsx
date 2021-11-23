@@ -1,36 +1,42 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Button, Divider } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Button } from 'antd';
+import { useDispatch, useSelector } from 'umi';
 import { useRequest } from 'ahooks';
 import CustomTable from '@/common/components/CustomTable';
 import Page from '@/common/components/Page';
 import LevelTag from '@/common/components/LevelTag';
 import Iconfont from '@/common/components/IconFont';
 import Drag from '@/common/components/Drag';
-import { Bar } from '@/common/components/Echarts';
+import { RenderCharts } from '@/common/components/Echarts';
 import Query from './Query';
 import styles from './style.less';
-import { getIndicator } from '@/common/api';
-
-// const dataSource = [
-//   { text: '区 域', filed: 'area', id: 1, status: 'a' },
-//   { text: '日 期', filed: 'time', id: 2, status: 'a' },
-//   { text: '最高气温', filed: 'max', id: 3, status: 'a' },
-// ];
+import { getCityList, getIndicator } from '@/common/api';
 
 function index() {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [activeChaets, setActiveChaets] = useState<string>('bar1');
+  const dispathch = useDispatch();
+  const {
+    columns: catColumns,
+    resultList,
+    fireList,
+  } = useSelector((state: any) => state.detection);
   // const [columnsList, setColumnsList] = useState<any[]>([]);
   // const [slelectColKey, setSlelectColKey] = useState<string[]>();
   const { data: indicatorData } = useRequest<any>(() => getIndicator(), {
     formatResult: (res: any) =>
       res?.payload?.model && JSON.parse(res?.payload?.model),
   });
+  useEffect(() => {
+    getCityList().then((res) => {
+      console.log('res', resultList);
+    });
+  }, []);
 
   const columns = [
     {
       title: '站 号',
-      dataIndex: 'name',
+      dataIndex: 'device',
       isShow: true,
     },
     {
@@ -45,12 +51,12 @@ function index() {
     },
     {
       title: '日 期',
-      dataIndex: 'a1ge1',
+      dataIndex: 'time',
       isShow: true,
     },
     {
       title: '所属市（区）',
-      dataIndex: 'addr12ess1',
+      dataIndex: 'name',
     },
     {
       title: '所属乡',
@@ -58,19 +64,22 @@ function index() {
     },
     {
       title: '最高气温',
-      dataIndex: 'addr12ess3',
+      dataIndex: 'temperature',
+      isShow: true,
     },
     {
       title: '24小时降雨量',
-      dataIndex: 'addr12ess4',
+      dataIndex: 'rain',
+      isShow: true,
     },
     {
       title: '积雪深度',
-      dataIndex: 'addr12ess5',
+      dataIndex: 'snow',
+      isShow: true,
     },
     {
       title: '平均风速',
-      dataIndex: 'addr12ess6',
+      dataIndex: 'wind',
     },
     {
       title: '国标火险等级',
@@ -88,12 +97,6 @@ function index() {
   const changeTable = (selectedRowKeys: React.Key[], selectedRows: any[]) => {
     setSelectedRows(selectedRows);
   };
-
-  // useEffect(async () => {
-  //   const data = await getIndicator();
-  //   const { payload } = data;
-  //   console.log('data', JSON.parse(payload.model));
-  // }, []);
 
   // const selectColChange = useCallback((checkedValues: any[]) => {
   //   const selectKeyList = columns.filter(item => checkedValues.includes(item.dataIndex));
@@ -122,17 +125,6 @@ function index() {
     </div>
   );
 
-  const renderEcharts = () => {
-    switch (activeChaets) {
-      case 'bar1':
-        return <Bar />;
-      case 'bar2':
-        return <Bar direction="level" />;
-      default:
-        return <Bar />;
-    }
-  };
-
   return (
     <>
       <Page clsName={styles.dataQueryView}>
@@ -146,7 +138,7 @@ function index() {
           <CustomTable
             clsName={styles.tableView}
             columns={columns}
-            dataSource={data}
+            dataSource={fireList}
             rowSelection={{
               type: 'checkbox',
               onChange: changeTable,
@@ -160,14 +152,23 @@ function index() {
         <div className={styles.echartsView}>
           <Drag
             dataSource={indicatorData}
-            // a={{ 年份: { sqlType: 'BIGINT', visualType: 'number', modelType: 'category' }, 专利技术: { sqlType: 'BIGINT', visualType: 'number', modelType: 'value' }, 知识产权技术: { sqlType: 'BIGINT', visualType: 'number', modelType: 'value' }, 标准信息: { sqlType: 'BIGINT', visualType: 'number', modelType: 'value' }, 其他成果: { sqlType: 'BIGINT', visualType: 'number', modelType: 'value' } }}
-            onChange={(a, b, c) => {
-              setActiveChaets(c);
-              console.log('a', a, b, c);
+            onChange={(category, dataValue, type) => {
+              setActiveChaets(type);
+              const data = dataValue?.map((item) => ({
+                column: item,
+                func: 'sum',
+              }));
+              dispathch({
+                type: 'detection/getChartsFetchData',
+                payload: { groups: category, aggregators: data },
+              });
             }}
           />
-          {renderEcharts()}
-          {/* <Bar /> */}
+          <RenderCharts
+            activeChaets={activeChaets}
+            columns={catColumns}
+            resultList={resultList}
+          />
         </div>
       </Page>
     </>
