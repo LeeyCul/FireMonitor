@@ -1,6 +1,7 @@
 import { useRef, useState, useCallback, useMemo, useEffect } from 'react';
 import { Tooltip } from 'antd';
 import useStateCallback from '@/common/hooks/useStateCallback';
+import { LevelList } from '@/common/constant';
 
 interface Coordinates {
   x: number;
@@ -23,13 +24,41 @@ export default function useMarkerTooltip(mapId: string) {
       },
     );
   }, []);
+  const toolTipContent = useMemo(() => {
+    if (!data) return null;
+    const { temperature, humidity, levelSc1, name, rain, snow, wind } = data;
 
+    return (
+      <div>
+        <span>{name}</span>
+        <br />
+        <span>火险等级:</span>
+        <span>{LevelList[levelSc1 - 1].text}</span>
+        <br />
+        <span>温度:</span>
+        <span>{temperature}</span>
+        <br />
+        <span>湿度:</span>
+        <span>{humidity}</span>
+        <br />
+        <span>积雪厚度:</span>
+        <span>{snow}</span>
+        <br />
+        <span>风速:</span>
+        <span>{wind}</span>
+        <br />
+        <span>连续无降雨日:</span>
+        <span>{`${rain}天`}</span>
+        <br />
+      </div>
+    );
+  }, [data]);
   const dom = useMemo(
     () => (
       <Tooltip
         placement="right"
-        visible={visible}
-        title={<div style={{ width: 400 }}>data</div>}
+        visible={visible && data}
+        title={toolTipContent}
         color="rgba(0,0,0,0.6)"
       >
         <div
@@ -42,7 +71,7 @@ export default function useMarkerTooltip(mapId: string) {
         />
       </Tooltip>
     ),
-    [data, visible, x, y],
+    [toolTipContent, visible, x, y],
   );
 
   useEffect(() => {
