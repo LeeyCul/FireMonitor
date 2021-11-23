@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Radio, Tabs, DatePicker, Button, Cascader, Form } from 'antd';
+import { Radio, Tabs, DatePicker, Button, Cascader, Form, Select } from 'antd';
 import cn from 'classnames';
 import { useForm } from 'antd/es/form/Form';
+import moment from 'moment';
 import Amap from '@/common/components/Amap';
 import Page from '@/common/components/Page';
 import ToolBar from '@/common/components/UseInMap/ToolBar';
@@ -12,23 +13,17 @@ import LevelBar from '@/common/components/UseInMap/LevelBar';
 import useMapShiftBar from '@/common/components/UseInMap/MapShiftBar';
 import DataQuery from './dataQuery';
 import Statistic from './statistic';
-import { getDayRange, getQueryDay } from '@/common/api';
+import { getDayRange, getQueryDay, getCityList } from '@/common/api';
+import useMarkerTooltip from '@/common/components/UseInMap/useMarkerTooltip';
 
 const { TabPane } = Tabs;
-
-const mock = [
-  { temperature: 23, x: '102.54', y: '30.05', level: 1 },
-  { temperature: 23, x: '101.54', y: '30.05', level: 2 },
-  { temperature: 23, x: '102.54', y: '29.05', level: 3 },
-  { temperature: 23, x: '100.54', y: '30.05', level: 4 },
-  { temperature: 23, x: '102.54', y: '28.05', level: 5 },
-];
 
 const areaOptions = [
   { label: '行政区域', value: 'xx' },
   { label: '地理分区', value: 'yy' },
 ];
 
+const now = moment();
 function FilterBar(props: any) {
   const { onFilter } = props;
   const [form] = useForm();
@@ -37,9 +32,28 @@ function FilterBar(props: any) {
     () => setVisible((value) => !value),
     [],
   );
-  const handleFilter = useCallback(() => {
-    onFilter && onFilter(form.getFieldsValue());
-  }, [onFilter, form]);
+  const [areaList, setAreaList] = useState<any[]>([]);
+  const handleFilter = useCallback(async () => {
+    const data = await form.validateFields();
+    onFilter({
+      ...data,
+      areaItem: areaList.find((item) => item.code === data.area),
+    });
+  }, [onFilter, form, areaList]);
+
+  useEffect(() => {
+    getCityList().then((res) =>
+      setAreaList(
+        (res || []).map(({ code, name, ...other }) => ({
+          ...other,
+          code,
+          name,
+          label: name,
+          value: code,
+        })),
+      ),
+    );
+  }, []);
 
   return (
     <div className={styles.filterBar}>
@@ -55,14 +69,22 @@ function FilterBar(props: any) {
           <Iconfont type="iconarrow-double-up" />
         </div>
       </div>
-      <Form form={form}>
+      <Form form={form} initialValues={{ date: now }}>
         <div
           className={cn(styles.filterBox, visible ? styles.activeFilter : '')}
         >
           <div className={styles.searchItem}>
             <span className={styles.label}>时间</span>
-            <Form.Item name="date" className={styles.content}>
-              <DatePicker style={{ width: '100%' }} />
+            <Form.Item
+              name="date"
+              className={styles.content}
+              rules={[{ required: true, message: '请选择时间' }]}
+            >
+              <DatePicker
+                style={{ width: '100%' }}
+                value={now}
+                defaultValue={now}
+              />
             </Form.Item>
           </div>
           <div className={styles.searchItem}>
@@ -81,8 +103,11 @@ function FilterBar(props: any) {
                   className={styles.radio}
                 />
               </Form.Item>
-              <Form.Item name="area">
-                <Cascader />
+              <Form.Item
+                name="area"
+                rules={[{ required: true, message: '请选择地区' }]}
+              >
+                <Select options={areaList} />
               </Form.Item>
             </div>
           </div>
@@ -111,7 +136,10 @@ function Home() {
   const [isSatellite, MapShiftBar] = useMapShiftBar();
   const [mapReady, setMapReady] = useState<boolean>(false);
   const [hideLevel, setHideLevel] = useState<number[]>([]);
-  const [markList, setMarkList] = useState<any[]>(mock);
+  const [markList, setMarkList] = useState<any[]>([]);
+  const [dom, handleShow] = useMarkerTooltip('HOMEMAP');
+
+  // const [] = useRequest();
   // 地图加载好后回调
   const handleLoadMap = useCallback((AMap, map) => {
     const district = new AMap.DistrictSearch({
@@ -144,16 +172,23 @@ function Home() {
   }, []);
 
   // 点击自定义标签
-  const handleClickMarker = useCallback((e) => {
-    const data = e.target.getExtData(); // 获取到对应坐标的数据
-    console.log(e, data);
-    // todo 点击显示弹窗内容
-  }, []);
+  const handleClickMarker = useCallback(
+    (e) => {
+      const data = e.target.getExtData(); // 获取到对应坐标的数据
+      const { x, y, offsetX, offsetY } = e.originEvent;
+      handleShow({ x: x - offsetX, y: y - offsetY, data });
+      // todo 点击显示弹窗内容
+    },
+    [handleShow],
+  );
 
   const handleFilter = useCallback((search) => {
-    // todo request
+    const { areaItem, date } = search;
+    const { code, level } = areaItem;
+    getQueryDay({ code, level, time: moment(date).format('YYYY-MM-DD') }).then(
+      ({ data }) => setMarkList(data || []),
+    );
   }, []);
-
   // 切换卫星/行政图
   useEffect(() => {
     if (mapReady) {
@@ -175,14 +210,14 @@ function Home() {
         instance.off('click', handleClickMarker),
       );
       const markerList = markList
-        .filter((item) => hideLevel.every((hide) => item.level !== hide))
+        .filter((item) => hideLevel.every((hide) => item.levelSc1 !== hide))
         .map(
           (mark) =>
             new AmapRef.current.Marker({
               extData: mark,
               clickable: true,
-              position: new AMap.LngLat(mark.x, mark.y), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-              content: CustomMarkerHtml(mark.temperature, mark.level),
+              position: new AMap.LngLat(mark.lng, mark.lat), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+              content: CustomMarkerHtml(mark.temperature, mark.levelSc1),
             }),
         );
       markerList.map((instance) => instance.on('click', handleClickMarker));
@@ -200,6 +235,7 @@ function Home() {
           <ToolBar />
           <FilterBar onFilter={handleFilter} />
           {MapShiftBar}
+          {dom}
         </div>
       </TabPane>
       <TabPane tab="数据查询" key="2">
