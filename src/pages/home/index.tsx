@@ -42,9 +42,9 @@ function FilterBar(props: any) {
   }, [onFilter, form, areaList]);
 
   useEffect(() => {
-    getCityList().then((res) =>
+    getCityList({ pid: '510000' }).then((res) =>
       setAreaList(
-        (res || []).map(({ code, name, ...other }) => ({
+        (res || [])?.map(({ code, name, ...other }) => ({
           ...other,
           code,
           name,

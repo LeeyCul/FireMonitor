@@ -1,10 +1,17 @@
 import { Reducer, Effect } from 'umi';
 import * as apis from '@/common/api';
 
+interface DataQueryRespon {
+  list?: any[];
+  totalPage?: number;
+  totalRow?: number;
+}
+
 export interface IState {
   resultList: any[];
   columns: any[];
   fireList: any[];
+  dataQuery: DataQueryRespon;
 }
 
 interface IDetection {
@@ -14,10 +21,12 @@ interface IDetection {
   effects: {
     getChartsFetchData: Effect;
     getQueryDayData: Effect;
+    getDataQuery: Effect;
   };
   reducers: {
     setCharsData: Reducer;
     setFireList: Reducer;
+    setDataQueryPageData: Reducer;
   };
 }
 const Detection: IDetection = {
@@ -26,6 +35,7 @@ const Detection: IDetection = {
     resultList: [],
     columns: [],
     fireList: [],
+    dataQuery: {},
   },
   subscriptions: {},
   effects: {
@@ -37,6 +47,10 @@ const Detection: IDetection = {
     *getQueryDayData({ payload: query }, { call, put }) {
       const { data } = yield call(apis.getQueryDay, query);
       yield put({ type: 'setFireList', payload: data });
+    },
+    *getDataQuery({ payload: query }, { call, put }) {
+      const { data } = yield call(apis.getQueryDayFilter, query);
+      yield put({ type: 'setDataQueryPageData', payload: data });
     },
   },
   reducers: {
@@ -51,6 +65,12 @@ const Detection: IDetection = {
       return {
         ...state,
         fireList: payload,
+      };
+    },
+    setDataQueryPageData(state, { payload }) {
+      return {
+        ...state,
+        dataQuery: payload,
       };
     },
   },
