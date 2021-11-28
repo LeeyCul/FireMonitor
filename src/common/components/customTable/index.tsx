@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Table, Alert } from 'antd';
+import { Table, Alert, PaginationProps } from 'antd';
 import styles from './styles.less';
 
 interface Props {
@@ -9,14 +9,6 @@ interface Props {
   dataSource: any[];
   /* 行大小 */
   size?: 'default' | 'middle' | 'small';
-  /* 是否可以快速跳转至某页 */
-  showQuickJumper?: boolean;
-  /* 只有一页时是否隐藏分页器 */
-  hideOnSinglePage?: boolean;
-  /* 页码或 pageSize 改变的回调，参数是改变后的页码及每页条数 */
-  onChange?: () => void;
-  /* pageSize */
-  onShowSizeChange?: () => void;
   /* 表格行 key 的取值，可以是字符串或一个函数 */
   rowKey?: string | ((record: any) => string);
   /* 多选扩展 */
@@ -26,6 +18,7 @@ interface Props {
   /* 显示Alert */
   showAlert?: boolean;
   clsName?: string;
+  pagination?: PaginationProps;
 }
 
 const CustomTable: React.FC<Props> = (props) => {
@@ -33,10 +26,7 @@ const CustomTable: React.FC<Props> = (props) => {
     columns,
     dataSource,
     size,
-    showQuickJumper,
-    hideOnSinglePage,
-    onChange,
-    onShowSizeChange,
+    pagination,
     rowKey,
     multipleExtendNode,
     rowSelection,
@@ -49,6 +39,7 @@ const CustomTable: React.FC<Props> = (props) => {
     ...item,
     className: styles.tabheadler,
   }));
+  const random = Math.random().toString(36).substring(2, 6);
   return (
     <div className={clsName}>
       {showAlert && (
@@ -61,15 +52,10 @@ const CustomTable: React.FC<Props> = (props) => {
       <Table
         columns={columnsList}
         dataSource={dataSource}
-        rowKey={rowKey}
+        rowKey={rowKey || random}
         size={size as any}
         rowClassName={rowClassName}
-        pagination={{
-          showQuickJumper,
-          hideOnSinglePage,
-          onChange,
-          onShowSizeChange,
-        }}
+        pagination={pagination}
         rowSelection={rowSelection}
       />
     </div>
@@ -78,8 +64,6 @@ const CustomTable: React.FC<Props> = (props) => {
 
 CustomTable.defaultProps = {
   size: 'small',
-  showQuickJumper: false,
-  hideOnSinglePage: true,
   showAlert: false,
 };
 

@@ -83,7 +83,7 @@ function index() {
     },
     {
       title: '国标火险等级',
-      dataIndex: 'name2',
+      dataIndex: 'levelSc1',
       isShow: true,
       render: (index: number) => <LevelTag level={index} />,
     },
