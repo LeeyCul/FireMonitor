@@ -11,11 +11,8 @@ export interface IState {
   resultList: any[];
   columns: any[];
   fireList: any[];
-<<<<<<< HEAD
   dataQuery: DataQueryRespon;
-=======
   caseList: any[];
->>>>>>> 352afc3 (feat: 案例表单)
 }
 
 interface IDetection {
@@ -26,11 +23,13 @@ interface IDetection {
     getChartsFetchData: Effect;
     getQueryDayData: Effect;
     getDataQuery: Effect;
+    getCaseList: Effect;
   };
   reducers: {
     setCharsData: Reducer;
     setFireList: Reducer;
     setDataQueryPageData: Reducer;
+    setCaseList: Reducer;
   };
 }
 const Detection: IDetection = {
@@ -39,11 +38,8 @@ const Detection: IDetection = {
     resultList: [],
     columns: [],
     fireList: [],
-<<<<<<< HEAD
     dataQuery: {},
-=======
     caseList: [],
->>>>>>> 352afc3 (feat: 案例表单)
   },
   subscriptions: {},
   effects: {
@@ -56,15 +52,13 @@ const Detection: IDetection = {
       const { data } = yield call(apis.getQueryDay, query);
       yield put({ type: 'setFireList', payload: data });
     },
-<<<<<<< HEAD
     *getDataQuery({ payload: query }, { call, put }) {
       const { data } = yield call(apis.getQueryDayFilter, query);
       yield put({ type: 'setDataQueryPageData', payload: data });
-=======
+    },
     *getCaseList({ payload: query }, { call, put }) {
       const { data } = yield call(apis.getCaseList, query);
       yield put({ type: 'setCaseList', payload: data?.list || [] });
->>>>>>> 352afc3 (feat: 案例表单)
     },
   },
   reducers: {
@@ -81,17 +75,16 @@ const Detection: IDetection = {
         fireList: payload,
       };
     },
-<<<<<<< HEAD
     setDataQueryPageData(state, { payload }) {
       return {
         ...state,
         dataQuery: payload,
-=======
+      };
+    },
     setCaseList(state, { payload }) {
       return {
         ...state,
         caseList: payload,
->>>>>>> 352afc3 (feat: 案例表单)
       };
     },
   },
