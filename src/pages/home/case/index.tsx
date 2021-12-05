@@ -1,30 +1,31 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from 'antd';
 import { useDispatch, useSelector } from 'umi';
+import { PlusOutlined } from '@ant-design/icons';
 import CustomTable from '@/common/components/CustomTable';
 import Page from '@/common/components/Page';
 import Query from './Query';
 import styles from './style.less';
-import { PlusOutlined } from '@ant-design/icons';
+import Detail from './Detail';
 
 function index() {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const dispatch = useDispatch();
-  const { fireList } = useSelector((state: any) => state.detection);
+  const { caseList } = useSelector((state: any) => state.detection);
   const columns = [
     {
       title: '案例名称',
-      dataIndex: 'device',
+      dataIndex: 'title',
       isShow: true,
     },
     {
       title: '案例介绍',
-      dataIndex: 'age1',
+      dataIndex: 'description',
       isShow: true,
     },
     {
       title: '创建时间',
-      dataIndex: 'addres1s1',
+      dataIndex: 'createdAt',
       isShow: true,
     },
     {
@@ -80,8 +81,9 @@ function index() {
 
   useEffect(() => {
     dispatch({
-      type: 'detection/getQueryDayData',
-      payload: { level: 1, code: 510000, time: '2021-11-21' },
+      type: 'detection/getCaseList',
+      // size current name createdAt
+      payload: {},
     });
   }, []);
 
@@ -110,7 +112,7 @@ function index() {
           <CustomTable
             clsName={styles.tableView}
             columns={columns}
-            dataSource={[{}]}
+            dataSource={caseList}
             rowSelection={{
               type: 'checkbox',
               onChange: changeTable,
@@ -119,6 +121,7 @@ function index() {
             multipleExtendNode={<MultipleExtendNode />}
           />
         </Page>
+        <Detail />
       </Page>
     </>
   );
