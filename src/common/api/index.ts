@@ -88,10 +88,10 @@ export async function getCaseDetail(params?: any) {
 /**
  * 删除案例库
  */
-export async function deleteCase(params?: any) {
+export async function deleteCase(data?: { ids: number[] }) {
   return request('v1/app/case', {
     method: 'delete',
-    params,
+    data,
   });
 }
 

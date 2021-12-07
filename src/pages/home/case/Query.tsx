@@ -1,16 +1,29 @@
-import React from 'react';
-import { Form, Input, Select, Button, DatePicker } from 'antd';
-import { SearchOutlined, LockOutlined } from '@ant-design/icons';
+import { Form, Input, Button, DatePicker } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { useCallback } from 'react';
+import dayjs from 'dayjs';
 import Iconfont from '@/common/components/IconFont';
 
 const { RangePicker } = DatePicker;
-const { Option } = Select;
 
-function Query() {
+function Query(props: { onSearch: (params: any) => void }) {
   const [form] = Form.useForm();
   const onFinish = (values: any) => {
-    console.log('Finish:', values);
+    const { createdAt, name } = values;
+    let result: any = {};
+    if (createdAt) {
+      result.createAtStart = dayjs(createdAt[0]).format('YYYY-MM-DD');
+      result.createAtEnd = dayjs(createdAt[1]).format('YYYY-MM-DD');
+    }
+    if (name) {
+      result.name = name;
+    }
+    props.onSearch(result);
   };
+  const handleReset = useCallback(() => {
+    form.resetFields();
+    props.onSearch({});
+  }, []);
   return (
     <Form
       form={form}
@@ -18,11 +31,11 @@ function Query() {
       layout="inline"
       onFinish={onFinish}
     >
-      <Form.Item name="password" label="案例名">
-        <Input style={{ width: 120 }} placeholder="请输入内容" />
+      <Form.Item name="name" label="案例名">
+        <Input placeholder="请输入内容" />
       </Form.Item>
-      <Form.Item name="username" label="创建时间">
-        <RangePicker style={{ width: 160 }} />
+      <Form.Item name="createdAt" label="创建时间">
+        <RangePicker />
       </Form.Item>
       <Form.Item shouldUpdate>
         {() => (
@@ -31,7 +44,10 @@ function Query() {
               查询
             </Button>
             &emsp;
-            <Button icon={<Iconfont type="iconrefresh" size={12} />}>
+            <Button
+              icon={<Iconfont type="iconrefresh" size={12} />}
+              onClick={handleReset}
+            >
               重置
             </Button>
           </>
