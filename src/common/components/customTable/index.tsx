@@ -17,6 +17,7 @@ interface Props {
   rowSelection?: object;
   /* 显示Alert */
   showAlert?: boolean;
+  loading?: boolean;
   clsName?: string;
   pagination?: PaginationProps;
 }
@@ -32,6 +33,7 @@ const CustomTable: React.FC<Props> = (props) => {
     rowSelection,
     showAlert,
     clsName,
+    loading,
   } = props;
   const rowClassName = (_record: any, index: number) =>
     index % 2 === 0 ? styles.even : '';
@@ -50,6 +52,7 @@ const CustomTable: React.FC<Props> = (props) => {
         />
       )}
       <Table
+        loading={loading}
         columns={columnsList}
         dataSource={dataSource}
         rowKey={rowKey || random}

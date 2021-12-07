@@ -12,7 +12,8 @@ export interface IState {
   columns: any[];
   fireList: any[];
   dataQuery: DataQueryRespon;
-  caseList: any[];
+  caseList: DataQueryRespon;
+  loading: boolean;
 }
 
 interface IDetection {
@@ -30,6 +31,7 @@ interface IDetection {
     setFireList: Reducer;
     setDataQueryPageData: Reducer;
     setCaseList: Reducer;
+    setLoading: Reducer;
   };
 }
 const Detection: IDetection = {
@@ -39,7 +41,8 @@ const Detection: IDetection = {
     columns: [],
     fireList: [],
     dataQuery: {},
-    caseList: [],
+    caseList: {},
+    loading: false,
   },
   subscriptions: {},
   effects: {
@@ -57,8 +60,10 @@ const Detection: IDetection = {
       yield put({ type: 'setDataQueryPageData', payload: data });
     },
     *getCaseList({ payload: query }, { call, put }) {
+      yield put({ type: 'setLoading', payload: true });
       const { data } = yield call(apis.getCaseList, query);
-      yield put({ type: 'setCaseList', payload: data?.list || [] });
+      yield put({ type: 'setCaseList', payload: data });
+      yield put({ type: 'setLoading', payload: false });
     },
   },
   reducers: {
@@ -85,6 +90,12 @@ const Detection: IDetection = {
       return {
         ...state,
         caseList: payload,
+      };
+    },
+    setLoading(state, { payload }) {
+      return {
+        ...state,
+        loading: payload,
       };
     },
   },

@@ -1,17 +1,31 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from 'antd';
-import { useDispatch, useSelector } from 'umi';
+import { useDispatch, useSelector, useRequest } from 'umi';
 import { PlusOutlined } from '@ant-design/icons';
 import CustomTable from '@/common/components/CustomTable';
 import Page from '@/common/components/Page';
 import Query from './Query';
 import styles from './style.less';
-import Detail from './Detail';
+import Detail from './Modal';
+import { deleteCase } from '@/common/api';
 
 function index() {
-  const [selectedRows, setSelectedRows] = useState<any[]>([]);
+  const queryParams = useRef<any>({});
+  const pagination = useRef<{ current: number; size: number }>({
+    current: 1,
+    size: 10,
+  });
+  const [selectedRowKeys, setSelectedRows] = useState<any[]>([]);
+  const [visible, setVisible] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const { caseList } = useSelector((state: any) => state.detection);
+  const { caseList, loading } = useSelector((state: any) => state.detection);
+  const { list, totalRow } = caseList;
+  const { run: deleteCaseRequest, loading: deleteLoading } = useRequest(
+    deleteCase,
+    {
+      manual: true,
+    },
+  );
   const columns = [
     {
       title: '案例名称',
@@ -37,7 +51,7 @@ function index() {
       title: '操作',
       dataIndex: 'x',
       width: '200px',
-      render: () => [
+      render: (_: null, row: any) => [
         <Button
           type="primary"
           ghost
@@ -63,6 +77,7 @@ function index() {
           key="del"
           style={{ marginRight: 10 }}
           size="small"
+          onClick={handleDelete.bind(null, row.id)}
         >
           删除
         </Button>,
@@ -70,58 +85,106 @@ function index() {
     },
   ];
 
-  let data = [];
-  for (let i = 0; i < 100; i++) {
-    data.push({ name: i, key: i });
-  }
-
-  const changeTable = (selectedRowKeys: React.Key[], selectedRows: any[]) => {
-    setSelectedRows(selectedRows);
+  const changeTable = (selectedRowKeys: React.Key[]) => {
+    setSelectedRows(selectedRowKeys);
   };
 
-  useEffect(() => {
+  const handleShiftVisible = useCallback(
+    () => setVisible((value) => !value),
+    [],
+  );
+
+  const handleRequest = useCallback((params?: any) => {
     dispatch({
       type: 'detection/getCaseList',
-      // size current name createdAt
-      payload: {},
+      payload: {
+        ...queryParams.current,
+        ...pagination.current,
+        ...params,
+      },
     });
   }, []);
+
+  const handleQuery = useCallback((params) => {
+    queryParams.current = params;
+    handleRequest();
+  }, []);
+
+  const handelChangePagination = useCallback((current, size) => {
+    pagination.current = { current, size };
+    handleRequest();
+  }, []);
+
+  const handleDelete = useCallback(
+    (id) => {
+      if (typeof id === 'number') {
+        deleteCaseRequest({ ids: [id] }).then(() => {
+          handleRequest();
+        });
+      } else {
+        deleteCaseRequest({ ids: selectedRowKeys });
+      }
+    },
+    [selectedRowKeys, handleRequest],
+  );
 
   const MultipleExtendNode = () => (
     <div className={styles.extendNodeView}>
       <span className={styles.selectView}>
         已选择
-        <span className={styles.num}>{selectedRows?.length}</span>
+        <span className={styles.num}>{selectedRowKeys?.length}</span>
         项目
       </span>
-      <Button ghost danger size="small" style={{ marginLeft: 50 }}>
+      <Button
+        ghost
+        danger
+        size="small"
+        style={{ marginLeft: 50 }}
+        onClick={handleDelete}
+      >
         批量删除
       </Button>
     </div>
   );
 
+  useEffect(() => {
+    handleRequest();
+  }, []);
+
   return (
     <>
       <Page clsName={styles.dataQueryView}>
-        <Query />
+        <Query onSearch={handleQuery} />
         <hr className={styles.line} />
         <Page style={{ paddingLeft: 0, margin: 0 }}>
-          <Button type="primary" icon={<PlusOutlined />}>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={handleShiftVisible}
+          >
             新建档案
           </Button>
           <CustomTable
+            rowKey="id"
+            loading={loading || deleteLoading}
             clsName={styles.tableView}
             columns={columns}
-            dataSource={caseList}
+            dataSource={list}
             rowSelection={{
               type: 'checkbox',
+              selectedRowKeys,
               onChange: changeTable,
             }}
-            showAlert={!!selectedRows?.length}
+            showAlert={!!selectedRowKeys?.length}
             multipleExtendNode={<MultipleExtendNode />}
+            pagination={{
+              showSizeChanger: true,
+              total: totalRow,
+              onChange: handelChangePagination,
+            }}
           />
         </Page>
-        <Detail />
+        <Detail visible={visible} onClose={handleShiftVisible} />
       </Page>
     </>
   );
