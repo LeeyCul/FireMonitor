@@ -4,7 +4,6 @@ import cn from 'classnames';
 import { useForm } from 'antd/es/form/Form';
 import moment from 'moment';
 import Amap from '@/common/components/Amap';
-import Page from '@/common/components/Page';
 import ToolBar from '@/common/components/UseInMap/ToolBar';
 import styles from './style.less';
 import Iconfont from '@/common/components/IconFont';
@@ -13,7 +12,8 @@ import LevelBar from '@/common/components/UseInMap/LevelBar';
 import useMapShiftBar from '@/common/components/UseInMap/MapShiftBar';
 import DataQuery from './dataQuery';
 import Statistic from './statistic';
-import { getDayRange, getQueryDay, getCityList } from '@/common/api';
+import Case from './case';
+import { getQueryDay, getCityList } from '@/common/api';
 import useMarkerTooltip from '@/common/components/UseInMap/useMarkerTooltip';
 
 const { TabPane } = Tabs;
@@ -137,39 +137,42 @@ function Home() {
   const [mapReady, setMapReady] = useState<boolean>(false);
   const [hideLevel, setHideLevel] = useState<number[]>([]);
   const [markList, setMarkList] = useState<any[]>([]);
-  const [dom, handleShow] = useMarkerTooltip('HOMEMAP');
+  const [dom, handleShow, handleCloseTooltip] = useMarkerTooltip('HOMEMAP');
 
-  // const [] = useRequest();
   // 地图加载好后回调
-  const handleLoadMap = useCallback((AMap, map) => {
-    const district = new AMap.DistrictSearch({
-      extensions: 'all',
-      level: 'district',
-      bubble: true,
-    });
-    district.search('四川', (_: any, result: any) => {
-      const bounds = result.districtList[0].boundaries;
-      const polygons = [];
-      if (bounds) {
-        for (let i = 0, l = bounds.length; i < l; i++) {
-          const polygon = new AMap.Polygon({
-            map,
-            strokeWeight: 1,
-            path: bounds[i],
-            fillOpacity: 0.7,
-            fillColor: '#CCF3FF',
-            strokeColor: '#CC66CC',
-          });
-          polygons.push(polygon);
+  const handleLoadMap = useCallback(
+    (AMap, map) => {
+      const district = new AMap.DistrictSearch({
+        extensions: 'all',
+        level: 'district',
+        bubble: true,
+      });
+      district.search('四川', (_: any, result: any) => {
+        const bounds = result.districtList[0].boundaries;
+        const polygons = [];
+        if (bounds) {
+          for (let i = 0, l = bounds.length; i < l; i++) {
+            const polygon = new AMap.Polygon({
+              map,
+              strokeWeight: 1,
+              path: bounds[i],
+              fillOpacity: 0.7,
+              fillColor: '#CCF3FF',
+              strokeColor: '#CC66CC',
+            });
+            polygons.push(polygon);
+          }
+          // 地图自适应
+          map.setFitView();
         }
-        // 地图自适应
-        map.setFitView();
-      }
-    });
-    AmapRef.current = AMap;
-    mapRef.current = map;
-    setMapReady(true);
-  }, []);
+      });
+      AmapRef.current = AMap;
+      mapRef.current = map;
+      map.on('zoomchange', handleCloseTooltip);
+      setMapReady(true);
+    },
+    [handleCloseTooltip],
+  );
 
   // 点击自定义标签
   const handleClickMarker = useCallback(
@@ -185,9 +188,11 @@ function Home() {
   const handleFilter = useCallback((search) => {
     const { areaItem, date } = search;
     const { code, level } = areaItem;
-    getQueryDay({ code, level, time: moment(date).format('YYYY-MM-DD') }).then(
-      ({ data }) => setMarkList(data || []),
-    );
+    getQueryDay({
+      code,
+      level,
+      time: moment(date).format('YYYY-MM-DD'),
+    }).then(({ data }) => setMarkList(data || []));
   }, []);
   // 切换卫星/行政图
   useEffect(() => {
@@ -220,11 +225,12 @@ function Home() {
               content: CustomMarkerHtml(mark.temperature, mark.levelSc1),
             }),
         );
+      handleCloseTooltip();
       markerList.map((instance) => instance.on('click', handleClickMarker));
       preMarkerList.current = markerList;
       mapRef.current!.add(markerList);
     }
-  }, [mapReady, markList, hideLevel]);
+  }, [mapReady, markList, hideLevel, handleCloseTooltip]);
 
   return (
     <Tabs defaultActiveKey="1" className={styles.TabsView}>
@@ -245,7 +251,7 @@ function Home() {
         <Statistic />
       </TabPane>
       <TabPane tab="案例库" key="4">
-        <Page>案例库</Page>
+        <Case />
       </TabPane>
     </Tabs>
   );

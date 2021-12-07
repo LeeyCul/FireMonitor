@@ -64,3 +64,53 @@ export async function getQueryDayFilter(params?: any) {
     params,
   });
 }
+
+/**
+ * 获取案例库列表
+ */
+export async function getCaseList(params?: any) {
+  return request('v1/app/data/query/case-list', {
+    method: 'get',
+    params,
+  });
+}
+
+/**
+ * 获取案例库详情
+ */
+export async function getCaseDetail(params?: any) {
+  return request('v1/app/data/query/case-info', {
+    method: 'get',
+    params,
+  });
+}
+
+/**
+ * 删除案例库
+ */
+export async function deleteCase(data?: { ids: number[] }) {
+  return request('v1/app/case', {
+    method: 'delete',
+    data,
+  });
+}
+
+/**
+ * 创建案例库
+ */
+export async function postCreateCase(params?: any) {
+  return request('v1/app/case', {
+    method: 'post',
+    params,
+  });
+}
+
+/**
+ * 修改案例库
+ */
+export async function putUpdateCase(params?: any) {
+  return request('v1/app/case', {
+    method: 'put',
+    params,
+  });
+}

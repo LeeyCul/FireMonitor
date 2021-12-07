@@ -8,7 +8,13 @@ interface Coordinates {
   y: number;
 }
 
-export default function useMarkerTooltip(mapId: string) {
+export default function useMarkerTooltip(
+  mapId: string,
+): [
+  dom: React.ReactNode,
+  handleShiftVisible: (config: { x: number; y: number; data: any }) => void,
+  handleClose: () => void,
+] {
   const offset = useRef<Coordinates>({ x: 0, y: 0 });
   const [visible, setVisible] = useStateCallback<boolean>(false);
   const [data, setData] = useState<any>();
@@ -23,6 +29,9 @@ export default function useMarkerTooltip(mapId: string) {
         }
       },
     );
+  }, []);
+  const handleClose = useCallback(() => {
+    setVisible(false);
   }, []);
   const toolTipContent = useMemo(() => {
     if (!data) return null;
@@ -75,9 +84,11 @@ export default function useMarkerTooltip(mapId: string) {
   );
 
   useEffect(() => {
-    const { x, y } = document.getElementById(mapId)?.getBoundingClientRect();
+    const { x, y } = document
+      .getElementById(mapId)
+      ?.getBoundingClientRect() as { x: number; y: number };
     offset.current = { x, y };
   }, []);
 
-  return [dom, handleShiftVisible];
+  return [dom, handleShiftVisible, handleClose];
 }
