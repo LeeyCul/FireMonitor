@@ -19,10 +19,10 @@ export default defineConfig({
     loading: '@/common/components/Loading',
   },
   proxy: {
-    '/v1': {
+    '/api': {
       target: 'http://iot.feelbang.com:8088',
       changeOrigin: true,
-      pathRewrite: { '^/v1': '' },
+      pathRewrite: { '^/api': '' },
     },
   },
   // extraPostCSSPlugins: [
