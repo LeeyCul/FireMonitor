@@ -16,6 +16,7 @@ import Statistic from './statistic';
 import Case from './case';
 import { getQueryDay, getCityList } from '@/common/api';
 import useMarkerTooltip from '@/common/components/UseInMap/useMarkerTooltip';
+import useStateCallback from '@/common/hooks/useStateCallback';
 
 const { TabPane } = Tabs;
 
@@ -33,7 +34,7 @@ function FilterBar(props: any) {
     () => setVisible((value) => !value),
     [],
   );
-  const [areaList, setAreaList] = useState<any[]>([]);
+  const [areaList, setAreaList] = useStateCallback<any[]>([]);
   const handleFilter = useCallback(async () => {
     const data = await form.validateFields();
     onFilter({
@@ -43,7 +44,7 @@ function FilterBar(props: any) {
   }, [onFilter, form, areaList]);
 
   useEffect(() => {
-    getCityList({ pid: '510000' }).then((res) =>
+    getCityList({ pid: '510000' }).then((res) => {
       setAreaList(
         (res || [])?.map(({ code, name, ...other }) => ({
           ...other,
@@ -52,8 +53,13 @@ function FilterBar(props: any) {
           label: name,
           value: code,
         })),
-      ),
-    );
+        async (areaList) => {
+          const data = await form.getFieldsValue();
+          form.setFieldsValue({ area: areaList[0].code });
+          props.onFilter({ ...data, areaItem: areaList[0].code });
+        },
+      );
+    });
   }, []);
 
   return (

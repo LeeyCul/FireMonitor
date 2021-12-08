@@ -1,5 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Radio, Tabs, DatePicker, Button, Cascader, Form } from 'antd';
+import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import {
+  Radio,
+  Tabs,
+  DatePicker,
+  Button,
+  Cascader,
+  Form,
+  Slider,
+  Dropdown,
+  Menu,
+} from 'antd';
+import {
+  PauseOutlined,
+  CaretRightOutlined,
+  CaretDownOutlined,
+} from '@ant-design/icons';
 import cn from 'classnames';
 import { useForm } from 'antd/es/form/Form';
 import Amap from '@/common/components/Amap';
@@ -12,19 +27,113 @@ import useMapShiftBar from '@/common/components/UseInMap/MapShiftBar';
 import Query from './dataQuery';
 import Statistic from './statistic';
 import useMarkerTooltip from '@/common/components/UseInMap/useMarkerTooltip';
+import MockOrigin from './mock.json';
 
-const mock = [
-  { temperature: 23, x: '102.54', y: '30.05', level: 1 },
-  { temperature: 23, x: '101.54', y: '30.05', level: 2 },
-  { temperature: 23, x: '102.54', y: '29.05', level: 3 },
-  { temperature: 23, x: '100.54', y: '30.05', level: 4 },
-  { temperature: 23, x: '102.54', y: '28.05', level: 5 },
+const menuOptions = [
+  { value: 1, label: '1秒' },
+  { value: 10, label: '10秒' },
+  { value: 30, label: '30秒' },
 ];
+
+function generateMock() {
+  const list = [];
+  for (let i = 0; i < 5; i++) {
+    list.push({
+      date: `2021-12-1${i} 14:00:00`,
+      list: MockOrigin.map(({ temperature, levelSc1, ...res }) => ({
+        temperature: Number((Math.random() * 60 - 20).toFixed(2)),
+        levelSc1: Math.max(Number(Math.floor(Math.random() * 6).toFixed(0)), 1),
+        ...res,
+      })),
+    });
+  }
+  return list;
+}
+
 const areaOptions = [
   { label: '行政区域', value: 'xx' },
   { label: '地理分区', value: 'yy' },
 ];
 const mapId = 'FORECAST';
+function Progress(props: { onShiftMarker: () => void; data: any[] }) {
+  const { onShiftMarker, data } = props;
+  const timer = useRef<NodeJS.Timer>();
+  const step = useRef<number>(0);
+  const [playState, setPaly] = useState<boolean>(false);
+  const [value, setValue] = useState<number>(0);
+  const [interval, setInterval] = useState<number>(menuOptions[0].value);
+  const menu = useMemo(
+    () => (
+      <Menu>
+        {menuOptions.map(({ value, label }) => (
+          <Menu.Item key={value} disabled>
+            {label}
+          </Menu.Item>
+        ))}
+      </Menu>
+    ),
+    [],
+  );
+  const play = useCallback(() => {
+    setPaly(true);
+    timer.current && clearInterval(timer.current);
+    timer.current = window.setInterval(() => {
+      setValue((value) => {
+        if (value >= step.current && timer.current) {
+          clearInterval(timer.current);
+          setPaly(false);
+          return 0;
+        }
+        return value + 1;
+      });
+    }, 1000);
+  }, []);
+
+  const pause = useCallback(() => {
+    setPaly(false);
+    timer.current && clearInterval(timer.current);
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      step.current = data.length * interval;
+    }
+  }, [data, interval]);
+
+  useEffect(() => {
+    if (props.data && value) {
+      const current = Math.floor(value / interval);
+      props.onShiftMarker(props.data[current - 1]?.list || []);
+    }
+  }, [interval, value]);
+
+  return (
+    <div className={styles.slider}>
+      <div className={styles.slider_play}>
+        {playState ? (
+          <PauseOutlined style={{ color: '#0095FB' }} onClick={pause} />
+        ) : (
+          <CaretRightOutlined style={{ color: '#0095FB' }} onClick={play} />
+        )}
+      </div>
+      <Slider
+        style={{ flex: 1 }}
+        min={0}
+        max={data?.length * interval}
+        value={value}
+        tooltipVisible={playState}
+        tooltipPlacement="bottom"
+        tipFormatter={() => '??!1'}
+      />
+      <Dropdown overlay={menu}>
+        <div className={styles.slider_menu}>
+          <span>{interval}秒</span>
+          <CaretDownOutlined />
+        </div>
+      </Dropdown>
+    </div>
+  );
+}
 
 function FilterBar(props: any) {
   const { onFilter } = props;
@@ -37,7 +146,6 @@ function FilterBar(props: any) {
   const handleFilter = useCallback(() => {
     onFilter && onFilter(form.getFieldsValue());
   }, [onFilter, form]);
-
   return (
     <div className={styles.filterBar}>
       <div className={styles.filterBarHeader}>
@@ -109,8 +217,9 @@ function Home() {
   const [isSatellite, MapShiftBar] = useMapShiftBar();
   const [mapReady, setMapReady] = useState<boolean>(false);
   const [hideLevel, setHideLevel] = useState<number[]>([]);
-  const [markList, setMarkList] = useState<any[]>(mock);
+  const [markList, setMarkList] = useState<any[]>([]);
   const [dom, handleShow] = useMarkerTooltip(mapId);
+  const [data, setData] = useState<any[]>(generateMock());
 
   // 地图加载好后回调
   const handleLoadMap = useCallback((AMap, map) => {
@@ -160,6 +269,11 @@ function Home() {
     // todo request
   }, []);
 
+  const handleShiftMarker = useCallback((list) => {
+    console.log(list);
+    setMarkList(list);
+  }, []);
+
   // 切换卫星/行政图
   useEffect(() => {
     if (mapReady) {
@@ -181,22 +295,22 @@ function Home() {
         instance.off('click', handleClickMarker),
       );
       const markerList = markList
-        .filter((item) => hideLevel.every((hide) => item.level !== hide))
+        .filter((item) => hideLevel.every((hide) => item.levelSc1 !== hide))
         .map(
           (mark) =>
             new AmapRef.current.Marker({
               extData: mark,
               clickable: true,
-              position: new AMap.LngLat(mark.x, mark.y), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-              content: CustomMarkerHtml(mark.temperature, mark.level),
+              position: new AMap.LngLat(mark.lng, mark.lat), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+              content: CustomMarkerHtml(mark.temperature, mark.levelSc1),
             }),
         );
+      // handleCloseTooltip();
       markerList.map((instance) => instance.on('click', handleClickMarker));
       preMarkerList.current = markerList;
       mapRef.current!.add(markerList);
     }
   }, [mapReady, markList, hideLevel]);
-
   return (
     <Tabs defaultActiveKey="1" className={styles.TabsView}>
       <TabPane tab="火险等级" key="1">
@@ -207,6 +321,7 @@ function Home() {
           <FilterBar onFilter={handleFilter} />
           {MapShiftBar}
           {dom}
+          <Progress data={data} onShiftMarker={handleShiftMarker} />
         </div>
       </TabPane>
       <TabPane tab="数据查询" key="2">
