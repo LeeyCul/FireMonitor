@@ -14,6 +14,7 @@ export interface IState {
   dataQuery: DataQueryRespon;
   caseList: DataQueryRespon;
   loading: boolean;
+  activeKey: string;
 }
 
 interface IDetection {
@@ -32,6 +33,7 @@ interface IDetection {
     setDataQueryPageData: Reducer;
     setCaseList: Reducer;
     setLoading: Reducer;
+    setActiveKey: Reducer;
   };
 }
 const Detection: IDetection = {
@@ -43,6 +45,7 @@ const Detection: IDetection = {
     dataQuery: {},
     caseList: {},
     loading: false,
+    activeKey: '1',
   },
   subscriptions: {},
   effects: {
@@ -96,6 +99,12 @@ const Detection: IDetection = {
       return {
         ...state,
         loading: payload,
+      };
+    },
+    setActiveKey(state, { payload }) {
+      return {
+        ...state,
+        activeKey: payload,
       };
     },
   },

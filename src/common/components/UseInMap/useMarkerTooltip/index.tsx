@@ -42,7 +42,7 @@ export default function useMarkerTooltip(
         <span>{name}</span>
         <br />
         <span>火险等级:</span>
-        <span>{LevelList[levelSc1 - 1].text}</span>
+        <span>{LevelList[levelSc1 - 1]?.text}</span>
         <br />
         <span>温度:</span>
         <span>{temperature}</span>
@@ -84,9 +84,11 @@ export default function useMarkerTooltip(
   );
 
   useEffect(() => {
-    const { x, y } = document
-      .getElementById(mapId)
-      ?.getBoundingClientRect() as { x: number; y: number };
+    const { x, y } =
+      (document?.getElementById(mapId)?.getBoundingClientRect() as {
+        x: number;
+        y: number;
+      }) || {};
     offset.current = { x, y };
   }, []);
 

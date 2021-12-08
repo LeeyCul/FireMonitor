@@ -21,7 +21,7 @@ export async function getChartsData(params?: any) {
 
 /* 登陆 */
 export async function getLogin(params: any) {
-  return request(`${baseUrl1}/user/login`, {
+  return request('/api/user/login', {
     method: 'post',
     data: params,
   });
@@ -29,7 +29,7 @@ export async function getLogin(params: any) {
 
 /* 区域列表 */
 export async function getCityList(params?: any) {
-  return request(`${baseUrl1}/app/area/list`, {
+  return request('/api/app/area/list', {
     method: 'get',
     params,
   });
@@ -39,7 +39,7 @@ export async function getCityList(params?: any) {
  * 根据区域获取日数据
  */
 export async function getQueryDay(params?: any) {
-  return request(`${baseUrl1}/app/data/query/day`, {
+  return request('/api/app/data/query/day', {
     method: 'get',
     params,
   });
@@ -49,7 +49,7 @@ export async function getQueryDay(params?: any) {
  * 获取单个站点数据
  */
 export async function getDayRange(params?: any) {
-  return request(`${baseUrl1}/app/data/query/day-range`, {
+  return request('/api/app/data/query/day-range', {
     method: 'get',
     params,
   });
@@ -59,7 +59,7 @@ export async function getDayRange(params?: any) {
  * 火险监测-数据查询
  */
 export async function getQueryDayFilter(params?: any) {
-  return request(`${baseUrl1}/app/data/query/day-filter`, {
+  return request('/api/app/data/query/day-filter', {
     method: 'get',
     params,
   });
@@ -69,7 +69,7 @@ export async function getQueryDayFilter(params?: any) {
  * 获取案例库列表
  */
 export async function getCaseList(params?: any) {
-  return request('v1/app/data/query/case-list', {
+  return request('/api/app/data/query/case-list', {
     method: 'get',
     params,
   });
@@ -79,7 +79,7 @@ export async function getCaseList(params?: any) {
  * 获取案例库详情
  */
 export async function getCaseDetail(params?: any) {
-  return request('v1/app/data/query/case-info', {
+  return request('/api/app/data/query/case-info', {
     method: 'get',
     params,
   });
@@ -89,7 +89,7 @@ export async function getCaseDetail(params?: any) {
  * 删除案例库
  */
 export async function deleteCase(data?: { ids: number[] }) {
-  return request('v1/app/case', {
+  return request('/api/app/case', {
     method: 'delete',
     data,
   });
@@ -99,7 +99,7 @@ export async function deleteCase(data?: { ids: number[] }) {
  * 创建案例库
  */
 export async function postCreateCase(params?: any) {
-  return request('v1/app/case', {
+  return request('/api/app/case', {
     method: 'post',
     params,
   });
@@ -109,7 +109,7 @@ export async function postCreateCase(params?: any) {
  * 修改案例库
  */
 export async function putUpdateCase(params?: any) {
-  return request('v1/app/case', {
+  return request('/api/app/case', {
     method: 'put',
     params,
   });
