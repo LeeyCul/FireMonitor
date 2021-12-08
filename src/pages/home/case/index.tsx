@@ -6,8 +6,9 @@ import CustomTable from '@/common/components/CustomTable';
 import Page from '@/common/components/Page';
 import Query from './Query';
 import styles from './style.less';
-import Detail from './Modal';
+import Modal from './Modal';
 import { deleteCase } from '@/common/api';
+import Detail from './Detail';
 
 function index() {
   const queryParams = useRef<any>({});
@@ -16,7 +17,9 @@ function index() {
     size: 10,
   });
   const [selectedRowKeys, setSelectedRows] = useState<any[]>([]);
-  const [visible, setVisible] = useState<boolean>(false);
+  const [show, setShow] = useState<boolean>(false); // 是否显示详情页面
+  const [visible, setVisible] = useState<boolean>(false); //  是否显示新建弹窗
+  const [id, setId] = useState<number>(); // 详情id
   const dispatch = useDispatch();
   const { caseList, loading } = useSelector((state: any) => state.detection);
   const { list, totalRow } = caseList;
@@ -26,6 +29,10 @@ function index() {
       manual: true,
     },
   );
+  const handleShowDetail = useCallback((id) => {
+    setShow(true);
+    setId(id);
+  }, []);
   const columns = [
     {
       title: '案例名称',
@@ -58,6 +65,7 @@ function index() {
           key="show"
           style={{ marginRight: 10 }}
           size="small"
+          onClick={handleShowDetail.bind(null, row.id)}
         >
           查看
         </Button>,
@@ -67,6 +75,7 @@ function index() {
           key="edit"
           style={{ marginRight: 10 }}
           size="small"
+          // onClick={handleShowDetail}
         >
           编辑
         </Button>,
@@ -154,37 +163,40 @@ function index() {
   return (
     <>
       <Page clsName={styles.dataQueryView}>
-        <Query onSearch={handleQuery} />
-        <hr className={styles.line} />
-        <Page style={{ paddingLeft: 0, margin: 0 }}>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={handleShiftVisible}
-          >
-            新建档案
-          </Button>
-          <CustomTable
-            rowKey="id"
-            loading={loading || deleteLoading}
-            clsName={styles.tableView}
-            columns={columns}
-            dataSource={list}
-            rowSelection={{
-              type: 'checkbox',
-              selectedRowKeys,
-              onChange: changeTable,
-            }}
-            showAlert={!!selectedRowKeys?.length}
-            multipleExtendNode={<MultipleExtendNode />}
-            pagination={{
-              showSizeChanger: true,
-              total: totalRow,
-              onChange: handelChangePagination,
-            }}
-          />
-        </Page>
-        <Detail visible={visible} onClose={handleShiftVisible} />
+        <div className={styles.listWrapper}>
+          <Query onSearch={handleQuery} />
+          <hr className={styles.line} />
+          <Page style={{ paddingLeft: 0, margin: 0 }}>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={handleShiftVisible}
+            >
+              新建档案
+            </Button>
+            <CustomTable
+              rowKey="id"
+              loading={loading || deleteLoading}
+              clsName={styles.tableView}
+              columns={columns}
+              dataSource={list}
+              rowSelection={{
+                type: 'checkbox',
+                selectedRowKeys,
+                onChange: changeTable,
+              }}
+              showAlert={!!selectedRowKeys?.length}
+              multipleExtendNode={<MultipleExtendNode />}
+              pagination={{
+                showSizeChanger: true,
+                total: totalRow,
+                onChange: handelChangePagination,
+              }}
+            />
+          </Page>
+          <Modal visible={visible} onClose={handleShiftVisible} />
+        </div>
+        <Detail visible={show} id={id} onClose={() => setShow(false)} />
       </Page>
     </>
   );
