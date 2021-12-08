@@ -20,7 +20,9 @@ function index() {
     columns: catColumns,
     resultList,
     fireList,
+    dataQuery,
   } = useSelector((state: any) => state.detection);
+  const { list, totalRow } = dataQuery || {};
   // const [columnsList, setColumnsList] = useState<any[]>([]);
   // const [slelectColKey, setSlelectColKey] = useState<string[]>();
   const { data: indicatorData } = useRequest<any>(() => getIndicator(), {
@@ -30,6 +32,10 @@ function index() {
   useEffect(() => {
     getCityList().then((res) => {
       console.log('res', resultList);
+    });
+    dispathch({
+      type: 'detection/getDataQuery',
+      payload: { size: 10 },
     });
   }, []);
 
@@ -98,6 +104,13 @@ function index() {
     setSelectedRows(selectedRows);
   };
 
+  const changePage = (current: number, size?: number) => {
+    dispathch({
+      type: 'detection/getDataQuery',
+      payload: { size, current },
+    });
+  };
+
   // const selectColChange = useCallback((checkedValues: any[]) => {
   //   const selectKeyList = columns.filter(item => checkedValues.includes(item.dataIndex));
   //   setColumnsList(selectKeyList);
@@ -138,10 +151,15 @@ function index() {
           <CustomTable
             clsName={styles.tableView}
             columns={columns}
-            dataSource={fireList}
+            dataSource={list}
             rowSelection={{
               type: 'checkbox',
               onChange: changeTable,
+            }}
+            pagination={{
+              showSizeChanger: true,
+              total: totalRow,
+              onChange: changePage,
             }}
             showAlert={!!selectedRows?.length}
             multipleExtendNode={<MultipleExtendNode />}

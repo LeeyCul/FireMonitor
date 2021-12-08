@@ -9,11 +9,12 @@ import styles from './style.less';
 function Header() {
   const [time, setTime] = useState<string>();
   let timer = useRef<any>();
-
+  const user = window.sessionStorage.getItem('user');
   const getCurrentTime = () => {
-    timer.current = setInterval(() => {
-      setTime(dayjs().format('YYYY年MM月DD日 HH:mm:ss'));
-    }, 1000);
+    setTime(dayjs().format('YYYY年MM月DD日 HH:mm:ss'));
+    // timer.current = setInterval(() => {
+    //   setTime(dayjs().format('YYYY年MM月DD日 HH:mm:ss'));
+    // }, 1000);
   };
 
   useEffect(() => {
@@ -37,7 +38,8 @@ function Header() {
         </div>
         <div className={styles.userInfo}>
           <Iconfont type="iconuser" size={18} />
-          &nbsp; 用户名
+          &nbsp;
+          {user}
         </div>
         <div
           className={styles.logout}

@@ -1,7 +1,7 @@
 @import url('../../common/styles/mixin.less');
 .loginView {
   height: 100vh;
-  background: linear-gradient(217deg, #6b3bee, #00bafb) !important;
+  background: linear-gradient(-45deg, #cdedff 0%, #f3f3f3 100%);
 
   .loginContent {
     width: 1012px;
@@ -18,7 +18,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #0095fb;
+      color: #3a74c5;
       font-weight: bold;
 
       font-size: 36px;
@@ -65,7 +65,7 @@
   }
 
   .inputText {
-    color: #0095fb;
+    color: #3875c6;
     font-weight: bold;
     font-size: 16px;
     background: #eefaff;
@@ -74,13 +74,24 @@
   .loginBtn {
     width: 175px;
     height: 40px;
-    background: #0095fb;
+    background: #3a74c5;
     border-radius: 20px;
   }
 }
 
 :global {
   .ant-input {
+    background: #eefaff;
+  }
+  .ant-form-item-has-error
+    :not(.ant-input-disabled):not(.ant-input-borderless).ant-input {
+    background: #eefaff;
+  }
+  .ant-form-item-has-error
+    :not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper {
+    background: #eefaff;
+  }
+  .ant-input-prefix {
     background: #eefaff;
   }
 }

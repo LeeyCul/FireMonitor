@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Radio, Tabs, DatePicker, Button, Cascader, Form, Select } from 'antd';
 import cn from 'classnames';
+import { useSelector, useDispatch } from 'umi';
 import { useForm } from 'antd/es/form/Form';
 import moment from 'moment';
 import Amap from '@/common/components/Amap';
@@ -137,8 +138,10 @@ function Home() {
   const [mapReady, setMapReady] = useState<boolean>(false);
   const [hideLevel, setHideLevel] = useState<number[]>([]);
   const [markList, setMarkList] = useState<any[]>([]);
+  // const [activeKey, setActiveKey] = useState<string>('1');
   const [dom, handleShow, handleCloseTooltip] = useMarkerTooltip('HOMEMAP');
-
+  const dispatch = useDispatch();
+  const { activeKey } = useSelector((state: any) => state.detection);
   // 地图加载好后回调
   const handleLoadMap = useCallback(
     (AMap, map) => {
@@ -233,7 +236,13 @@ function Home() {
   }, [mapReady, markList, hideLevel, handleCloseTooltip]);
 
   return (
-    <Tabs defaultActiveKey="1" className={styles.TabsView}>
+    <Tabs
+      className={styles.TabsView}
+      activeKey={activeKey}
+      onChange={(key) => {
+        dispatch({ type: 'detection/setActiveKey', payload: key });
+      }}
+    >
       <TabPane tab="火险等级" key="1">
         <div className={styles.mapView}>
           <Amap mapId="HOMEMAP" onLoadCallback={handleLoadMap} />
