@@ -1,68 +1,68 @@
-.dataQueryView {
-  .line {
-    height: 1px;
-    background: #eaeef2;
-    border: none;
-  }
-
-  .updateTime {
-    margin-left: 20px;
-    color: #999999;
-    font-weight: 400;
-    font-size: 14px;
-    font-family: SimHei;
-  }
-
-  .tableView {
-    margin-top: 30px;
-  }
-
-  .pageTitleView {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-}
-
-/* alert */
-.extendNodeView {
-  .selectView {
-    color: #666666;
-    font-weight: 400;
-    font-size: 14px;
-    font-family: Microsoft YaHei;
-  }
-
-  .num {
-    color: #0095fb;
-  }
-
-  .btn {
-    display: inline-block;
-    width: 80px;
-    height: 24px;
-    height: 24px;
-    margin-left: 30px;
-    color: #0095fb;
-    font-size: 14px;
-    line-height: 24px;
-    text-align: center;
-    background: #ffffff;
-    border: 1px solid #c9c9c9;
-    border-radius: 4px;
-  }
-}
-
-/* query */
-
-.formView {
+.statisticView {
   display: flex;
-  flex-wrap: wrap;
-  width: 80%;
+  padding: 0;
 
-  .lastTwo {
-    display: flex;
-    width: 100%;
-    margin-top: 20px;
+  .leftConainer {
+    width: 474px;
+    padding: 20px;
+    border-right: 1px solid #eaeef2;
+
+    .adressView {
+      margin-bottom: 20px;
+    }
+
+    .formsty {
+      display: flex;
+      width: 100%;
+
+      :global {
+        .ant-form-item-no-colon {
+          width: 100px !important;
+        }
+        .ant-form-item-no-colon {
+          display: inline-block;
+          width: 300px;
+        }
+      }
+    }
+
+    .formView {
+      margin-bottom: 20px;
+    }
+
+    .selectDataView {
+      .typeView {
+        margin-bottom: 20px;
+      }
+    }
+
+    .btnView {
+      width: 100%;
+      text-align: center;
+      .btn {
+        text-align: center;
+        background: #3a74c5;
+      }
+    }
   }
+
+  .rightConainer {
+    flex: 1;
+    padding: 20px;
+  }
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  margin-bottom: 20px;
+  padding: 10px;
+  color: #666666;
+  font-weight: 400;
+  font-size: 14px;
+  font-family: Microsoft YaHei;
+  background: #eef9ff;
+  border-left: 2px solid #2c94f0;
+  border-radius: 4px;
 }

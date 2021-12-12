@@ -123,7 +123,7 @@ function Progress(props: { onShiftMarker: () => void; data: any[] }) {
         value={value}
         tooltipVisible={playState}
         tooltipPlacement="bottom"
-        tipFormatter={() => '??!1'}
+        tipFormatter={() => null}
       />
       <Dropdown overlay={menu}>
         <div className={styles.slider_menu}>

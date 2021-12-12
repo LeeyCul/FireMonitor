@@ -19,7 +19,7 @@ function Query({ onChange }: Props) {
   const [list, setList] = useState<any[]>([]);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const { run } = useRequest<any>(apis.getCityList, {
+  const { run } = useRequest<any>(apis.getAreaList, {
     onError: (e) => message.error(e),
     manual: true,
   });
@@ -39,14 +39,16 @@ function Query({ onChange }: Props) {
     const query = _.pickBy({ ...values, start, end });
     onChange?.(query);
   };
-  const genTreeNode = (data: any[], parentId?: any) =>
-    data?.map((item: any, index: number) => ({
-      value: `${item?.code}`,
-      pId: parentId || item?.level,
-      title: item?.name,
-      id: item?.code,
-      isLeaf: item?.level > 2,
-    }));
+  const genTreeNode = (data: any[] = [], parentId?: any) =>
+    data?.length
+      ? data?.map((item: any, index: number) => ({
+          value: `${item?.code}`,
+          pId: parentId || item?.level,
+          title: item?.name,
+          id: item?.code,
+          isLeaf: item?.level > 2,
+        }))
+      : [];
 
   const onLoadData = ({ id }: any) =>
     new Promise<void>((resolve) => {

@@ -69,9 +69,7 @@ request.interceptors.request.use((url: string, options: any) => {
   const headers = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    // Authorization: `Bearer ${token}`,
-    Authorization:
-      'Bearer eyJhbGciOiJIUzUxMiJ9.eyJ0b2tlbl9jcmVhdGVfdGltZSI6MTYzNzY1NTIxNzc5Mywic3ViIjoiYWRtaW4iLCJ0b2tlbl91c2VyX25hbWUiOiJhZG1pbiIsImV4cCI6MTYzNzY1NzAxNywidG9rZW5fdXNlcl9wYXNzd29yZCI6IiQyYSQxMCRHMFhkZGZrVzNlRGNpZWZLU0dGTm1lZDBNN0dWemgwLnA0ajQ0N2dMc3k2Uy83TEZobjV4ZSJ9.imPKaPeiZH2aDm8tc9q_pBEO_QvT3zOIjny8ifKARxGiA4qEATKfUFWQTEogLv06FkEf-WLJ4AVVQ3XZuT58Sg',
+    Authorization: `${token}`,
   };
   return {
     url: encodeURI(url),
