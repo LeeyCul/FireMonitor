@@ -4,6 +4,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { useDispatch } from 'umi';
 import dayjs from 'dayjs';
+import _ from 'lodash';
 import * as apis from '@/common/api';
 import Iconfont from '@/common/components/IconFont';
 import styles from './style.less';
@@ -39,14 +40,16 @@ function Query({ onChange }: Props) {
     const query = _.pickBy({ ...values, start, end });
     onChange?.(query);
   };
-  const genTreeNode = (data: any[], parentId?: any) =>
-    data?.map((item: any, index: number) => ({
-      value: `${item?.code}`,
-      pId: parentId || item?.level,
-      title: item?.name,
-      id: item?.code,
-      isLeaf: item?.level > 2,
-    }));
+  const genTreeNode = (data: any[] = [], parentId?: any) =>
+    data?.length
+      ? data?.map((item: any, index: number) => ({
+          value: `${item?.code}`,
+          pId: parentId || item?.level,
+          title: item?.name,
+          id: item?.code,
+          isLeaf: item?.level > 2,
+        }))
+      : [];
 
   const onLoadData = ({ id }: any) =>
     new Promise<void>((resolve) => {

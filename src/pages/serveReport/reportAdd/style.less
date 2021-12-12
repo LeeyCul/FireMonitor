@@ -1,3 +1,125 @@
 .conainerView {
   width: 100%;
+
+  .headerView {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0px;
+    padding: 10px 6px;
+    border-bottom: 1px solid #eaeef2;
+
+    .title {
+      display: flex;
+      align-items: center;
+      color: #333333;
+      font-weight: 400;
+      font-size: 14px;
+      font-family: SimHei;
+
+      .icon {
+        margin: 0 10px;
+      }
+
+      .currentText {
+        color: #3a74c5;
+      }
+    }
+    .btn {
+      background-color: #3a74c5;
+    }
+  }
+
+  .content {
+    display: flex;
+    margin-top: 0;
+    padding-top: 0;
+
+    .leftView {
+      width: 474px;
+      padding: 20px 40px;
+      border-right: 1px solid #eaeef2;
+
+      .formsty {
+        display: flex;
+        width: 100%;
+
+        :global {
+          .ant-form-item-no-colon {
+            width: 100px !important;
+          }
+          .ant-form-item-no-colon {
+            display: inline-block;
+            width: 300px;
+          }
+        }
+      }
+
+      .btn {
+        background-color: #3a74c5;
+      }
+    }
+
+    .rightView {
+      flex: 1;
+      padding: 20px 30px 30px 20px;
+
+      .title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+
+        .titleText {
+          display: flex;
+          align-items: center;
+        }
+
+        .btnView {
+          .btn {
+            margin: 0 10px;
+          }
+        }
+      }
+      .reportView {
+        width: 797px;
+        height: 875px;
+
+        padding: 10px 20px;
+        text-align: center;
+        border: 1px solid #c6c6c6;
+
+        .titleT {
+          width: 100%;
+          color: red;
+          font-size: 30px;
+          text-align: center;
+        }
+
+        .InputNum {
+          width: 200px;
+          margin: 0 auto;
+        }
+
+        .adress {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+
+          input {
+            width: 200px;
+          }
+        }
+
+        .InputTitle {
+          width: 80%;
+          margin: 20px 0;
+        }
+
+        .textArea {
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
 }

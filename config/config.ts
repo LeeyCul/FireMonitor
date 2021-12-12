@@ -20,7 +20,7 @@ export default defineConfig({
   },
   proxy: {
     '/api': {
-      target: 'http://iot.feelbang.com:8088',
+      target: 'http://47.113.111.10:8888',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },

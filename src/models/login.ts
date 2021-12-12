@@ -18,12 +18,13 @@ const Login: ILogin = {
   subscriptions: {},
   effects: {
     *loginIn({ payload: userInfo }, { call, put }) {
-      const { code, msg, accessToken } = yield call(apis.getLogin, userInfo);
-      if (code) {
+      const { msg, data } = yield call(apis.getLogin, userInfo);
+      const { tokenValue, isLogin } = data || {};
+      if (!isLogin) {
         return notification.error({ message: msg, duration: 1 });
       }
-      sessionStorage.setItem('token', accessToken);
-      if (accessToken) {
+      sessionStorage.setItem('token', tokenValue);
+      if (tokenValue) {
         sessionStorage.setItem('user', userInfo.username);
         history.push('/');
       }

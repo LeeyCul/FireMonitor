@@ -114,3 +114,42 @@ export async function putUpdateCase(params?: any) {
     params,
   });
 }
+
+/**
+ * 公共模块
+ */
+/* 区域列表 */
+export async function getAreaList(params?: any) {
+  return request('/api/area/list', {
+    method: 'get',
+    params,
+  });
+}
+
+/**
+ * 服务模块
+ */
+
+/* list */
+export async function getReportList(params?: any) {
+  return request('/api/report/list', {
+    method: 'get',
+    params,
+  });
+}
+
+/* add */
+export async function getAdd(data: any) {
+  return request('/api/report', {
+    method: 'post',
+    data,
+  });
+}
+
+/* del */
+export async function getDelete(params?: any) {
+  return request('/api/report', {
+    method: 'delete',
+    data: params,
+  });
+}
