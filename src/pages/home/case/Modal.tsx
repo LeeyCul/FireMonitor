@@ -11,10 +11,14 @@ import {
   Upload,
   Button,
 } from 'antd';
-import { useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import cn from 'classnames';
 import Iconfont from '@/common/components/IconFont';
 import styles from './style.less';
+import SiChuanMap from '@/common/components/SichuanMap';
+import { Standard, Station } from '@/common/constant';
+import AreaFormItem from '@/common/components/AreaFormItem';
+import { postMultiUpload } from '@/common/api';
 
 interface Props {
   visible: boolean;
@@ -24,17 +28,21 @@ interface Props {
 export default function (props: Props) {
   const { visible, onClose } = props;
   const [current, setCurrent] = useState<number>(0);
+  const levelRef = useRef<string>();
   const [form] = Form.useForm();
   const handleReset = useCallback(() => {
     form.resetFields();
   }, [form]);
-  const handleNext = useCallback(() => {
+  const handleNext = useCallback(async () => {
+    await form.validateFields();
     setCurrent(1);
   }, [form]);
   const handleBack = useCallback(() => {
     setCurrent(0);
   }, []);
   const handleSave = useCallback(() => {
+    const { file, areaType, ...other } = form.getFieldsValue();
+    postMultiUpload({ files: [levelRef.current].concat(file?.fileList || []) });
     // form
     // onClose
   }, [form, onClose]);
@@ -52,13 +60,18 @@ export default function (props: Props) {
           <Form.Item
             label="案例名称"
             name="title"
-            rules={[{ max: 50, message: '输入50字以内的名称' }]}
+            labelCol={{ span: 4 }}
+            rules={[
+              { max: 50, message: '输入50字以内的名称' },
+              { required: true, message: '请输入案例名称' },
+            ]}
           >
             <Input placeholder="输入50字以内的名称" />
           </Form.Item>
           <Form.Item
             label="案例简介"
             name="description"
+            labelCol={{ span: 4 }}
             rules={[{ max: 500, message: '输入500字以内的简介' }]}
           >
             <Input.TextArea placeholder="输入500字以内的简介" />
@@ -68,7 +81,9 @@ export default function (props: Props) {
               <Form.Item
                 label="时间范围"
                 name="range"
+                labelCol={{ span: 8 }}
                 wrapperCol={{ span: 20 }}
+                rules={[{ required: true, message: '请选择时间范围' }]}
               >
                 <DatePicker.RangePicker />
               </Form.Item>
@@ -78,28 +93,35 @@ export default function (props: Props) {
                 label="计算标准"
                 name="standard"
                 labelCol={{ span: 8 }}
+                rules={[{ required: true, message: '请选择计算标准' }]}
               >
-                <Select options={[]} />
+                <Cascader options={Standard} />
               </Form.Item>
             </Col>
           </Row>
           <Row>
             <Col span={12}>
-              <Form.Item
-                label="区域类型"
-                name="areaType"
-                // area
-                wrapperCol={{ span: 20 }}
-              >
-                <Cascader options={[]} />
-              </Form.Item>
+              <AreaFormItem
+                labelCol={{ span: 8 }}
+                rules={[{ required: true, message: '请选择计算标准' }]}
+              />
             </Col>
             <Col span={12}>
-              <Form.Item label="台站" name="stationType" labelCol={{ span: 8 }}>
-                <Select options={[]} />
+              <Form.Item
+                label="台站"
+                name="stationType"
+                labelCol={{ span: 8 }}
+                rules={[{ required: true, message: '请选择台站' }]}
+              >
+                <Select options={Station} placeholder="请选择台站" />
               </Form.Item>
             </Col>
-            <Form.Item label="附件上传" name="file">
+            <Form.Item
+              label="附件上传"
+              name="file"
+              labelCol={{ span: 4 }}
+              style={{ width: '100%' }}
+            >
               <Upload>
                 <Button>上传文件</Button>
               </Upload>
@@ -125,6 +147,7 @@ export default function (props: Props) {
   const previewDom = useMemo(
     () => (
       <div className={cn(styles.stepBox, current ? styles.activeStep : '')}>
+        <SiChuanMap onGetImage={(level) => (levelRef.current = level)} />
         <Row align="middle" justify="center" gutter={24}>
           <Col>
             <Button onClick={handleBack}>上一步</Button>
@@ -139,6 +162,8 @@ export default function (props: Props) {
     ),
     [current],
   );
+
+  useEffect(() => {}, []);
 
   return (
     <Modal

@@ -77,3 +77,21 @@ export const figureList = [
   },
   // { title: '分布图', list: [{ icon: 'iconshijieditu', key: 'map' }] },
 ];
+
+export const Station = [
+  { value: '1', label: '国家站' },
+  { value: '2', label: '区域站' },
+];
+
+export const Standard = [
+  { value: '国标', label: '国标' },
+  {
+    value: '地标',
+    label: '国标',
+    children: [
+      { value: '算法一', label: '算法一' },
+      { value: '算法二', label: '算法二' },
+      { value: '算法三', label: '算法三' },
+    ],
+  },
+];
