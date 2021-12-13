@@ -69,7 +69,7 @@ export async function getQueryDayFilter(params?: any) {
  * 获取案例库列表
  */
 export async function getCaseList(params?: any) {
-  return request('/api/data/query/case-list', {
+  return request('/api/case/list', {
     method: 'get',
     params,
   });
@@ -78,17 +78,16 @@ export async function getCaseList(params?: any) {
 /**
  * 获取案例库详情
  */
-export async function getCaseDetail(params?: any) {
-  return request('/api/data/query/case-info', {
+export async function getCaseDetail(id: any) {
+  return request(`/api/case/${id}`, {
     method: 'get',
-    params,
   });
 }
 
 /**
  * 删除案例库
  */
-export async function deleteCase(data?: { ids: number[] }) {
+export async function deleteCase(data?: number[]) {
   return request('/api/case', {
     method: 'delete',
     data,
@@ -98,10 +97,10 @@ export async function deleteCase(data?: { ids: number[] }) {
 /**
  * 创建案例库
  */
-export async function postCreateCase(params?: any) {
+export async function postCreateCase(data?: any) {
   return request('/api/case', {
     method: 'post',
-    params,
+    data,
   });
 }
 
@@ -116,7 +115,6 @@ export async function putUpdateCase(params?: any) {
 }
 
 /**
-<<<<<<< HEAD
  * 公共模块
  */
 /* 区域列表 */
@@ -124,19 +122,10 @@ export async function getAreaList(params?: any) {
   return request('/api/area/list', {
     method: 'get',
     params,
-=======
- * 上传
- */
-export async function postUpload(data?: any) {
-  return request('/api/file/upload', {
-    method: 'post',
-    data,
->>>>>>> 9b85d03 (feat: 案例图生成)
   });
 }
 
 /**
-<<<<<<< HEAD
  * 服务模块
  */
 
@@ -151,17 +140,10 @@ export async function getReportList(params?: any) {
 /* add */
 export async function getAdd(data: any) {
   return request('/api/report', {
-=======
- * 批量上传
- */
-export async function postMultiUpload(data?: any) {
-  return request('/api/file/upload-multi', {
->>>>>>> 9b85d03 (feat: 案例图生成)
     method: 'post',
     data,
   });
 }
-<<<<<<< HEAD
 
 /* del */
 export async function getDelete(params?: any) {
@@ -170,5 +152,17 @@ export async function getDelete(params?: any) {
     data: params,
   });
 }
-=======
->>>>>>> 9b85d03 (feat: 案例图生成)
+
+// export async function postMultiUpload(data?: any) {
+//   return request('/api/file/upload-multi', {
+//     method: 'post',
+//     data,
+//   });
+// }
+
+// export async function postUpload(data?: any) {
+//   return request('/api/file/upload', {
+//     method: 'post',
+//     data,
+//   });
+// }

@@ -79,19 +79,19 @@ export const figureList = [
 ];
 
 export const Station = [
-  { value: '1', label: '国家站' },
-  { value: '2', label: '区域站' },
+  { value: 1, label: '国家站' },
+  { value: 2, label: '区域站' },
 ];
 
 export const Standard = [
-  { value: '国标', label: '国标' },
+  { value: 1, label: '国标' },
   {
-    value: '地标',
+    value: 2,
     label: '国标',
     children: [
-      { value: '算法一', label: '算法一' },
-      { value: '算法二', label: '算法二' },
-      { value: '算法三', label: '算法三' },
+      { value: 3, label: '算法一' },
+      { value: 4, label: '算法二' },
+      { value: 5, label: '算法三' },
     ],
   },
 ];

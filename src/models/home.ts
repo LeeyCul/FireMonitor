@@ -64,7 +64,7 @@ const Detection: IDetection = {
     },
     *getCaseList({ payload: query }, { call, put }) {
       yield put({ type: 'setLoading', payload: true });
-      const { data } = yield call(apis.getCaseList, query);
+      const data = yield call(apis.getCaseList, query);
       yield put({ type: 'setCaseList', payload: data });
       yield put({ type: 'setLoading', payload: false });
     },

@@ -18,15 +18,17 @@ import styles from './style.less';
 import SiChuanMap from '@/common/components/SichuanMap';
 import { Standard, Station } from '@/common/constant';
 import AreaFormItem from '@/common/components/AreaFormItem';
-import { postMultiUpload } from '@/common/api';
+import { postCreateCase, getCaseDetail } from '@/common/api';
 
 interface Props {
+  id: number | null;
   visible: boolean;
   onClose: () => void;
+  onRefresh: () => void;
 }
 
 export default function (props: Props) {
-  const { visible, onClose } = props;
+  const { id, visible, onClose, onRefresh } = props;
   const [current, setCurrent] = useState<number>(0);
   const levelRef = useRef<string>();
   const [form] = Form.useForm();
@@ -41,10 +43,27 @@ export default function (props: Props) {
     setCurrent(0);
   }, []);
   const handleSave = useCallback(() => {
-    const { file, areaType, ...other } = form.getFieldsValue();
-    postMultiUpload({ files: [levelRef.current].concat(file?.fileList || []) });
-    // form
-    // onClose
+    const { file, areaList, range, standard, ...other } = form.getFieldsValue();
+    const [areaType, area] = areaList;
+    const data = {
+      areaType,
+      area: `${area}`,
+      startTime: range[0],
+      endTime: range[1],
+      standard: standard.slice().pop(),
+      ...other,
+    };
+    if (file) {
+      data.file = JSON.stringify(
+        file.fileList.map(({ response }) => response.data),
+      );
+    }
+    postCreateCase(data).then(() => {
+      onClose();
+      onRefresh();
+      setCurrent(0);
+      form.resetFields();
+    });
   }, [form, onClose]);
 
   const handleCancel = useCallback(() => {
@@ -122,7 +141,7 @@ export default function (props: Props) {
               labelCol={{ span: 4 }}
               style={{ width: '100%' }}
             >
-              <Upload>
+              <Upload action="/api/file/upload">
                 <Button>上传文件</Button>
               </Upload>
             </Form.Item>
@@ -163,7 +182,14 @@ export default function (props: Props) {
     [current],
   );
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (id && visible) {
+      getCaseDetail(id).then((data) => {
+        const { area, areaType, endTime, standard, file } = data;
+        // form.setFields
+      });
+    }
+  }, [id, visible]);
 
   return (
     <Modal

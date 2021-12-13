@@ -3,8 +3,8 @@ import { Cascader, Form } from 'antd';
 import { getCityList } from '@/common/api';
 
 const topList = [
-  { label: '行政区域', value: '行政区域' },
-  { label: '地理分区', value: '地理分区' },
+  { label: '行政区域', value: 0 },
+  { label: '地理分区', value: 1 },
 ];
 
 export default function AreaFormItem(props: any) {
@@ -21,14 +21,15 @@ export default function AreaFormItem(props: any) {
       setData(topList.map((item) => ({ ...item, children })));
     });
   }, []);
+  // todo 升级或者修改
   return (
     <Form.Item
       label="区域类型"
-      name="areaType"
+      name="areaList"
       wrapperCol={{ span: 20 }}
       {...(props || {})}
     >
-      <Cascader options={data} />
+      <Cascader multiple options={data} />
     </Form.Item>
   );
 }

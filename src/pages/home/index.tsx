@@ -55,7 +55,7 @@ function FilterBar(props: any) {
         })),
         async (areaList) => {
           const data = await form.getFieldsValue();
-          form.setFieldsValue({ area: areaList[0].code });
+          form.setFieldsValue({ area: areaList[0]?.code });
           props.onFilter({ ...data, areaItem: areaList[0].code });
         },
       );
@@ -201,7 +201,7 @@ function Home() {
       code,
       level,
       time: moment(date).format('YYYY-MM-DD'),
-    }).then(({ data }) => setMarkList(data || []));
+    }).then((data) => setMarkList(data || []));
   }, []);
   // 切换卫星/行政图
   useEffect(() => {
