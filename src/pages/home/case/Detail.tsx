@@ -1,11 +1,13 @@
+import { getCaseDetail } from '@/common/api';
 import { Button } from 'antd';
 import cn from 'classnames';
 import { useEffect, useState } from 'react';
 import styles from './style.less';
+import DetailPage from './detailPage';
 
 interface Props {
   visible: boolean;
-  id: number | undefined;
+  id: number | null;
   onClose: () => void;
 }
 
@@ -14,14 +16,14 @@ export default function (props: Props) {
   const [data, setData] = useState<any>({});
   useEffect(() => {
     if (id && visible) {
-      // todo 获取详情
+      getCaseDetail(id).then(({ data }) => {
+        setData(data);
+      });
     }
   }, [id, visible]);
   return (
     <div className={cn(styles.detail, visible ? styles.showDetail : '')}>
-      <div>
-        <Button onClick={onClose}>返回</Button>
-      </div>
+      <DetailPage data={data} onClose={onClose} />
     </div>
   );
 }

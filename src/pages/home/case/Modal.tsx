@@ -11,33 +11,64 @@ import {
   Upload,
   Button,
 } from 'antd';
-import { useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import cn from 'classnames';
+import moment from 'moment';
 import Iconfont from '@/common/components/IconFont';
 import styles from './style.less';
+import SiChuanMap from '@/common/components/SichuanMap';
+import { Standard, Station } from '@/common/constant';
+import AreaFormItem from '@/common/components/AreaFormItem';
+import { postCreateCase, getCaseDetail, putUpdateCase } from '@/common/api';
 
 interface Props {
+  id: number | null;
   visible: boolean;
   onClose: () => void;
+  onRefresh: () => void;
 }
 
 export default function (props: Props) {
-  const { visible, onClose } = props;
+  const { id, visible, onClose, onRefresh } = props;
   const [current, setCurrent] = useState<number>(0);
+  const [oldFile, setOldFile] = useState<any[]>([]);
+  const levelRef = useRef<string>();
   const [form] = Form.useForm();
   const handleReset = useCallback(() => {
     form.resetFields();
   }, [form]);
-  const handleNext = useCallback(() => {
+  const handleNext = useCallback(async () => {
+    await form.validateFields();
     setCurrent(1);
   }, [form]);
   const handleBack = useCallback(() => {
     setCurrent(0);
   }, []);
   const handleSave = useCallback(() => {
-    // form
-    // onClose
-  }, [form, onClose]);
+    const { file, areaList, range, standard, ...other } = form.getFieldsValue();
+    const [areaType, area] = areaList;
+    const request = id ? putUpdateCase : postCreateCase;
+    const data = {
+      areaType,
+      area: `${area}`,
+      startTime: range[0],
+      endTime: range[1],
+      standard: standard.slice().pop(),
+      ...other,
+    };
+    if (file) {
+      data.file = JSON.stringify(file.fileList);
+    }
+    if (id) {
+      data.id = id;
+    }
+    request(data).then(() => {
+      onClose();
+      onRefresh();
+      setCurrent(0);
+      form.resetFields();
+    });
+  }, [id, form, onClose]);
 
   const handleCancel = useCallback(() => {
     form.resetFields();
@@ -52,13 +83,18 @@ export default function (props: Props) {
           <Form.Item
             label="案例名称"
             name="title"
-            rules={[{ max: 50, message: '输入50字以内的名称' }]}
+            labelCol={{ span: 4 }}
+            rules={[
+              { max: 50, message: '输入50字以内的名称' },
+              { required: true, message: '请输入案例名称' },
+            ]}
           >
             <Input placeholder="输入50字以内的名称" />
           </Form.Item>
           <Form.Item
             label="案例简介"
             name="description"
+            labelCol={{ span: 4 }}
             rules={[{ max: 500, message: '输入500字以内的简介' }]}
           >
             <Input.TextArea placeholder="输入500字以内的简介" />
@@ -68,7 +104,9 @@ export default function (props: Props) {
               <Form.Item
                 label="时间范围"
                 name="range"
+                labelCol={{ span: 8 }}
                 wrapperCol={{ span: 20 }}
+                rules={[{ required: true, message: '请选择时间范围' }]}
               >
                 <DatePicker.RangePicker />
               </Form.Item>
@@ -78,29 +116,40 @@ export default function (props: Props) {
                 label="计算标准"
                 name="standard"
                 labelCol={{ span: 8 }}
+                rules={[{ required: true, message: '请选择计算标准' }]}
               >
-                <Select options={[]} />
+                <Cascader options={Standard} />
               </Form.Item>
             </Col>
           </Row>
           <Row>
             <Col span={12}>
-              <Form.Item
-                label="区域类型"
-                name="areaType"
-                // area
-                wrapperCol={{ span: 20 }}
-              >
-                <Cascader options={[]} />
-              </Form.Item>
+              <AreaFormItem
+                labelCol={{ span: 8 }}
+                rules={[{ required: true, message: '请选择计算标准' }]}
+              />
             </Col>
             <Col span={12}>
-              <Form.Item label="台站" name="stationType" labelCol={{ span: 8 }}>
-                <Select options={[]} />
+              <Form.Item
+                label="台站"
+                name="stationType"
+                labelCol={{ span: 8 }}
+                rules={[{ required: true, message: '请选择台站' }]}
+              >
+                <Select options={Station} placeholder="请选择台站" />
               </Form.Item>
             </Col>
-            <Form.Item label="附件上传" name="file">
-              <Upload>
+            <Form.Item
+              label="附件上传"
+              name="file"
+              labelCol={{ span: 4 }}
+              style={{ width: '100%' }}
+            >
+              <Upload
+                action="/api/file/upload"
+                fileList={oldFile}
+                onChange={({ fileList }) => setOldFile(fileList)}
+              >
                 <Button>上传文件</Button>
               </Upload>
             </Form.Item>
@@ -120,11 +169,12 @@ export default function (props: Props) {
         </Row>
       </div>
     ),
-    [form, current],
+    [form, current, oldFile],
   );
   const previewDom = useMemo(
     () => (
       <div className={cn(styles.stepBox, current ? styles.activeStep : '')}>
+        <SiChuanMap onGetImage={(level) => (levelRef.current = level)} />
         <Row align="middle" justify="center" gutter={24}>
           <Col>
             <Button onClick={handleBack}>上一步</Button>
@@ -140,10 +190,30 @@ export default function (props: Props) {
     [current],
   );
 
+  useEffect(() => {
+    if (id && visible) {
+      getCaseDetail(id).then(({ data }) => {
+        const { area, areaType, startTime, endTime, standard, file, ...other } =
+          data;
+        form.setFieldsValue({
+          range: [moment(startTime), moment(endTime)],
+          areaList: [areaType, Number(area)],
+          standard: [standard],
+          file: { fileList: JSON.parse(file) },
+          ...other,
+        });
+        setOldFile(JSON.parse(file));
+      });
+    } else {
+      setOldFile([]);
+    }
+  }, [id, visible]);
+
   return (
     <Modal
       width={946}
       visible={visible}
+      destroyOnClose
       title={
         <Row align="middle" gutter={10}>
           <Col>

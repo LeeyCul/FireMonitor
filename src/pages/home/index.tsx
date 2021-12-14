@@ -44,9 +44,9 @@ function FilterBar(props: any) {
   }, [onFilter, form, areaList]);
 
   useEffect(() => {
-    getCityList({ pid: '510000' }).then((res) => {
+    getCityList({ pid: '510000' }).then(({ data }) => {
       setAreaList(
-        (res || [])?.map(({ code, name, ...other }) => ({
+        (data || [])?.map(({ code, name, ...other }) => ({
           ...other,
           code,
           name,
@@ -55,7 +55,7 @@ function FilterBar(props: any) {
         })),
         async (areaList) => {
           const data = await form.getFieldsValue();
-          form.setFieldsValue({ area: areaList[0].code });
+          form.setFieldsValue({ area: areaList[0]?.code });
           props.onFilter({ ...data, areaItem: areaList[0].code });
         },
       );

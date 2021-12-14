@@ -29,7 +29,7 @@ export async function getLogin(params: any) {
 
 /* 区域列表 */
 export async function getCityList(params?: any) {
-  return request('/api/app/area/list', {
+  return request('/api/area/list', {
     method: 'get',
     params,
   });
@@ -39,7 +39,7 @@ export async function getCityList(params?: any) {
  * 根据区域获取日数据
  */
 export async function getQueryDay(params?: any) {
-  return request('/api/app/data/query/day', {
+  return request('/api/data/query/day', {
     method: 'get',
     params,
   });
@@ -49,7 +49,7 @@ export async function getQueryDay(params?: any) {
  * 获取单个站点数据
  */
 export async function getDayRange(params?: any) {
-  return request('/api/app/data/query/day-range', {
+  return request('/api/data/query/day-range', {
     method: 'get',
     params,
   });
@@ -59,7 +59,7 @@ export async function getDayRange(params?: any) {
  * 火险监测-数据查询
  */
 export async function getQueryDayFilter(params?: any) {
-  return request('/api/app/data/query/day-filter', {
+  return request('/api/data/query/day-filter', {
     method: 'get',
     params,
   });
@@ -69,7 +69,7 @@ export async function getQueryDayFilter(params?: any) {
  * 获取案例库列表
  */
 export async function getCaseList(params?: any) {
-  return request('/api/app/data/query/case-list', {
+  return request('/api/case/list', {
     method: 'get',
     params,
   });
@@ -78,18 +78,17 @@ export async function getCaseList(params?: any) {
 /**
  * 获取案例库详情
  */
-export async function getCaseDetail(params?: any) {
-  return request('/api/app/data/query/case-info', {
+export async function getCaseDetail(id: any) {
+  return request(`/api/case/${id}`, {
     method: 'get',
-    params,
   });
 }
 
 /**
  * 删除案例库
  */
-export async function deleteCase(data?: { ids: number[] }) {
-  return request('/api/app/case', {
+export async function deleteCase(data?: number[]) {
+  return request('/api/case', {
     method: 'delete',
     data,
   });
@@ -98,20 +97,20 @@ export async function deleteCase(data?: { ids: number[] }) {
 /**
  * 创建案例库
  */
-export async function postCreateCase(params?: any) {
-  return request('/api/app/case', {
+export async function postCreateCase(data?: any) {
+  return request('/api/case', {
     method: 'post',
-    params,
+    data,
   });
 }
 
 /**
  * 修改案例库
  */
-export async function putUpdateCase(params?: any) {
-  return request('/api/app/case', {
+export async function putUpdateCase(data?: any) {
+  return request('/api/case', {
     method: 'put',
-    params,
+    data,
   });
 }
 
@@ -153,3 +152,17 @@ export async function getDelete(params?: any) {
     data: params,
   });
 }
+
+// export async function postMultiUpload(data?: any) {
+//   return request('/api/file/upload-multi', {
+//     method: 'post',
+//     data,
+//   });
+// }
+
+// export async function postUpload(data?: any) {
+//   return request('/api/file/upload', {
+//     method: 'post',
+//     data,
+//   });
+// }

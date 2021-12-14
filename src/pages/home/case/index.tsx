@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from 'antd';
-import { useDispatch, useSelector, useRequest, history } from 'umi';
+import { useDispatch, useSelector, useRequest } from 'umi';
 import { PlusOutlined } from '@ant-design/icons';
 import CustomTable from '@/common/components/CustomTable';
 import Page from '@/common/components/Page';
@@ -19,10 +19,10 @@ function index() {
   const [selectedRowKeys, setSelectedRows] = useState<any[]>([]);
   const [show, setShow] = useState<boolean>(false); // 是否显示详情页面
   const [visible, setVisible] = useState<boolean>(false); //  是否显示新建弹窗
-  const [id, setId] = useState<number>(); // 详情id
+  const [id, setId] = useState<number | null>(null); // 详情id
   const dispatch = useDispatch();
   const { caseList, loading } = useSelector((state: any) => state.detection);
-  const { list, totalRow } = caseList;
+  const { records, total } = caseList;
   const { run: deleteCaseRequest, loading: deleteLoading } = useRequest(
     deleteCase,
     {
@@ -30,7 +30,6 @@ function index() {
     },
   );
   const handleShowDetail = useCallback((id) => {
-    history.push('/monitor/detail');
     setShow(true);
     setId(id);
   }, []);
@@ -76,8 +75,10 @@ function index() {
           key="edit"
           style={{ marginRight: 10 }}
           size="small"
-          // onClick={handleShowDetail}
-          onClick={() => setVisible(true)}
+          onClick={() => {
+            setId(row.id);
+            setVisible(true);
+          }}
         >
           编辑
         </Button>,
@@ -100,10 +101,14 @@ function index() {
     setSelectedRows(selectedRowKeys);
   };
 
-  const handleShiftVisible = useCallback(
-    () => setVisible((value) => !value),
-    [],
-  );
+  const handleShiftVisible = useCallback(() => {
+    setVisible((value) => {
+      if (value) {
+        setId(null);
+      }
+      return !value;
+    });
+  }, []);
 
   const handleRequest = useCallback((params?: any) => {
     dispatch({
@@ -129,11 +134,11 @@ function index() {
   const handleDelete = useCallback(
     (id) => {
       if (typeof id === 'number') {
-        deleteCaseRequest({ ids: [id] }).then(() => {
+        deleteCaseRequest([id]).then(() => {
           handleRequest();
         });
       } else {
-        deleteCaseRequest({ ids: selectedRowKeys });
+        deleteCaseRequest(selectedRowKeys);
       }
     },
     [selectedRowKeys, handleRequest],
@@ -181,7 +186,7 @@ function index() {
               loading={loading || deleteLoading}
               clsName={styles.tableView}
               columns={columns}
-              dataSource={list}
+              dataSource={records}
               rowSelection={{
                 type: 'checkbox',
                 selectedRowKeys,
@@ -191,14 +196,19 @@ function index() {
               multipleExtendNode={<MultipleExtendNode />}
               pagination={{
                 showSizeChanger: true,
-                total: totalRow,
+                total,
                 onChange: handelChangePagination,
               }}
             />
           </Page>
-          <Modal visible={visible} onClose={handleShiftVisible} />
+          <Modal
+            id={id}
+            visible={visible}
+            onClose={handleShiftVisible}
+            onRefresh={handleRequest}
+          />
         </div>
-        {/* <Detail visible={show} id={id} onClose={() => setShow(false)} /> */}
+        <Detail visible={show} id={id} onClose={() => setShow(false)} />
       </Page>
     </>
   );
