@@ -1,7 +1,6 @@
-import { getCaseDetail } from '@/common/api';
-import { Button } from 'antd';
 import cn from 'classnames';
 import { useEffect, useState } from 'react';
+import { getCaseDetail } from '@/common/api';
 import styles from './style.less';
 import DetailPage from './detailPage';
 

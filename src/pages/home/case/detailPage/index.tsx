@@ -1,23 +1,27 @@
 import { Button, Upload } from 'antd';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import dayjs from 'dayjs';
 import Page from '@/common/components/Page';
 import CustomTable from '@/common/components/customTable';
 import styles from './style.less';
 import LevelTag from '@/common/components/LevelTag';
 import SiChuanMap from '@/common/components/SichuanMap';
+import { getQueryDayFilter } from '@/common/api/index';
 
 interface Props {
   data: any;
-  onClose: () => {};
+  onClose: () => void;
 }
 
 function index(props: Props) {
   const { data, onClose } = props;
-  const { title, description, file } = data;
-  const list = [
-    { device: '001', name: '成都', temperature: '35' },
-    { device: '002', name: '自贡', temperature: '12' },
-    { device: '003', name: '德阳', temperature: '15' },
-  ];
+  const { title, description, file, endTime, startTime, area } = data;
+  const [list, setList] = useState<any[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const pagination = useRef<{ current: number; size: number }>({
+    current: 1,
+    size: 10,
+  });
   const columns = [
     {
       title: '站 号',
@@ -66,9 +70,31 @@ function index(props: Props) {
     },
   ];
 
+  const handleRequest = useCallback(() => {
+    getQueryDayFilter({
+      ...pagination.current,
+      start: dayjs(startTime).format('YYYY-MM-DD'),
+      end: dayjs(endTime).format('YYYY-MM-DD'),
+      code: area,
+    }).then(({ data }) => {
+      const { records, total } = data;
+      setList(records);
+      setTotal(total);
+    });
+  }, [endTime, startTime, area]);
+
+  const handelChangePagination = useCallback((current, size) => {
+    pagination.current = { current, size };
+    handleRequest();
+  }, []);
+
   const TitleCard = ({ title }: { title: string }) => (
     <div className={styles.titleCard}>{title}</div>
   );
+
+  useEffect(() => {
+    handleRequest();
+  }, [handleRequest]);
 
   return (
     <Page clsName={styles.detailView}>
@@ -86,7 +112,15 @@ function index(props: Props) {
         <SiChuanMap />
       </div>
       <TitleCard title="数据表" />
-      <CustomTable dataSource={list} columns={columns} />
+      <CustomTable
+        dataSource={list}
+        columns={columns}
+        pagination={{
+          total,
+          showSizeChanger: true,
+          onChange: handelChangePagination,
+        }}
+      />
       <TitleCard title="附件" />
       {!!file && (
         <Upload
