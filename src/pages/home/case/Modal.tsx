@@ -53,7 +53,7 @@ export default function (props: Props) {
       area: `${area}`,
       startTime: range[0],
       endTime: range[1],
-      standard: standard.slice().pop(),
+      standard: standard.join(','),
       ...other,
     };
     if (file) {
@@ -198,7 +198,7 @@ export default function (props: Props) {
         form.setFieldsValue({
           range: [moment(startTime), moment(endTime)],
           areaList: [areaType, Number(area)],
-          standard: [standard],
+          standard: standard.split(',').map((value) => Number(value)),
           file: { fileList: JSON.parse(file) },
           ...other,
         });
