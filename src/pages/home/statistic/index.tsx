@@ -10,7 +10,7 @@ import Drag from '@/common/components/Drag';
 import { RenderCharts } from '@/common/components/Echarts';
 import Query from './Query';
 import styles from './style.less';
-import { getCityList, getIndicator } from '@/common/api';
+import { getIndicator } from '@/common/api';
 
 function index() {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
@@ -22,7 +22,7 @@ function index() {
     fireList,
     dataQuery,
   } = useSelector((state: any) => state.detection);
-  const { list, totalRow } = dataQuery || {};
+  const { records, total } = dataQuery || {};
   // const [columnsList, setColumnsList] = useState<any[]>([]);
   // const [slelectColKey, setSlelectColKey] = useState<string[]>();
   const { data: indicatorData } = useRequest<any>(() => getIndicator(), {
@@ -30,9 +30,6 @@ function index() {
       res?.payload?.model && JSON.parse(res?.payload?.model),
   });
   useEffect(() => {
-    getCityList().then((res) => {
-      console.log('res', resultList);
-    });
     dispathch({
       type: 'detection/getDataQuery',
       payload: { size: 10 },
@@ -141,7 +138,14 @@ function index() {
   return (
     <>
       <Page clsName={styles.dataQueryView}>
-        <Query />
+        <Query
+          onChange={(value) => {
+            dispathch({
+              type: 'detection/getDataQuery',
+              payload: { size: 10, ...value },
+            });
+          }}
+        />
         <hr className={styles.line} />
         <Page
           icon="iconshujuliebiao"
@@ -151,14 +155,14 @@ function index() {
           <CustomTable
             clsName={styles.tableView}
             columns={columns}
-            dataSource={list}
+            dataSource={records}
             rowSelection={{
               type: 'checkbox',
               onChange: changeTable,
             }}
             pagination={{
               showSizeChanger: true,
-              total: totalRow,
+              total,
               onChange: changePage,
             }}
             showAlert={!!selectedRows?.length}

@@ -19,7 +19,8 @@ function Query({ onChange }: Props) {
   const [list, setList] = useState<any[]>([]);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const { run } = useRequest<any>(apis.getCityList, {
+  const { run } = useRequest<any>(apis.getAreaList, {
+    formatResult: (res) => res?.data,
     onError: (e) => message.error(e),
     manual: true,
   });

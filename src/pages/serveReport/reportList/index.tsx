@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Divider } from 'antd';
+import { Button, Divider, message } from 'antd';
+import { history, Link } from 'umi';
 import { useRequest } from 'ahooks';
-import { Link } from 'umi';
 import Page from '@/common/components/Page';
 import CustomTable from '@/common/components/CustomTable';
 import Iconfont from '@/common/components/IconFont';
@@ -44,9 +44,14 @@ function index() {
       align: 'center',
       render: (id: string) => (
         <div>
-          <Button type="primary">编辑</Button>
+          <Button
+            type="primary"
+            onClick={() => history.push(Links.ServeReportAdd)}
+          >
+            编辑
+          </Button>
           <Divider type="vertical" />
-          <Button type="primary" danger onClick={() => delRun({ ids: [id] })}>
+          <Button type="primary" danger onClick={() => delRun([id])}>
             删除
           </Button>
         </div>
@@ -55,15 +60,19 @@ function index() {
   ];
 
   // const [selectedRowKeys, setselectedRowKeys] = useState<Array<string | number>>([]);
-
+  const [query, setQuery] = useState<any>({});
   const { data, run, loading } = useRequest(getReportList, {
-    formatResult: (res: any) => res?.data,
+    formatResult: (res) => res?.data,
   });
   const { run: delRun, loading: delLoding } = useRequest(getDelete, {
+    formatResult: (res) => res?.data,
     manual: true,
   });
-  const { records } = data || {};
+  const { records, total } = data || {};
   console.log('data', data);
+  const changePage = (current: number, size?: number) => {
+    run({ size, current, ...query });
+  };
   // const rowSelection = {
   //   onChange: (selectedRowKeys: React.Key[], selectedRows: any[]) => {
   //     setselectedRowKeys(selectedRowKeys);
@@ -79,14 +88,25 @@ function index() {
           </Button>
         </Link>
         &emsp;
-        <Button icon={<Iconfont type="iconlayout" size={14} />}>下载</Button>
+        <Button
+          icon={<Iconfont type="iconlayout" size={14} />}
+          onClick={() => message.info('功能待开发')}
+        >
+          下载
+        </Button>
       </div>
     </div>
   );
 
   return (
     <Page clsName={styles.conainerView}>
-      <Query />
+      <Query
+        onResetFields={() => run()}
+        onchange={(value) => {
+          setQuery(value);
+          run(value);
+        }}
+      />
       <hr className={styles.line} />
       <Page
         icon="iconimage-text"
@@ -97,7 +117,12 @@ function index() {
           loading={loading}
           columns={columns}
           rowKey="id"
-          dataSource={records && [...records, { id: 2 }]}
+          dataSource={records && [...records]}
+          pagination={{
+            showSizeChanger: true,
+            total,
+            onChange: changePage,
+          }}
           // rowSelection={{
           //   type: 'checkbox',
           //   ...rowSelection,

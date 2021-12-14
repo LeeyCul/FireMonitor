@@ -28,7 +28,7 @@ const errorHandler = (error: any) => {
   if (response && response.status) {
     const errorText: any = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
-    if (status === 401) {
+    if (status === 401 || status === 403) {
       const urlAddress = url.split('/').pop();
       if (urlAddress === 'login') {
         message.error(errorText);

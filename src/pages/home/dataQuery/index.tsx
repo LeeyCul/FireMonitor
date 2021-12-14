@@ -14,7 +14,7 @@ function index() {
   const [query, setQuery] = useState<any>({});
   const dispatch = useDispatch();
   const { dataQuery } = useSelector((state: any) => state.detection);
-  const { list, totalRow } = dataQuery || {};
+  const { records, total } = dataQuery || {};
   const columns = [
     {
       title: '站 号',
@@ -161,14 +161,14 @@ function index() {
             clsName={styles.tableView}
             columns={columnsList}
             rowKey="name"
-            dataSource={list}
+            dataSource={records}
             // rowSelection={{
             //   type: 'checkbox',
             //   onChange: changeTable,
             // }}
             pagination={{
               showSizeChanger: true,
-              total: totalRow,
+              total,
               onChange: changePage,
             }}
             showAlert={!!selectedRows?.length}

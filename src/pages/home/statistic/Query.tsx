@@ -4,6 +4,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { useDispatch } from 'umi';
 import dayjs from 'dayjs';
+import _ from 'lodash';
 import * as apis from '@/common/api';
 import Iconfont from '@/common/components/IconFont';
 import styles from './style.less';
@@ -19,7 +20,8 @@ function Query({ onChange }: Props) {
   const [form] = Form.useForm();
   const [list, setList] = useState<any[]>([]);
   const dispatch = useDispatch();
-  const { run } = useRequest<any>(apis.getCityList, {
+  const { run } = useRequest<any>(apis.getAreaList, {
+    formatResult: (res) => res?.data,
     onError: (e) => message.error(e),
     manual: true,
   });
