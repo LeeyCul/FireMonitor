@@ -86,9 +86,9 @@ request.interceptors.request.use((url: string, options: any) => {
 /**
  * response拦截器, 处理response
  */
-request.interceptors.response.use(async (response) => {
-  const res = await response.json();
-  return res?.data;
-});
+// request.interceptors.response.use(async (response) => {
+//   const res = await response.json();
+//   return res?.data;
+// });
 
 export default request;

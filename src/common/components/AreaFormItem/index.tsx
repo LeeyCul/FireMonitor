@@ -10,8 +10,8 @@ const topList = [
 export default function AreaFormItem(props: any) {
   const [data, setData] = useState<any[]>();
   useEffect(() => {
-    getCityList({ pid: '510000' }).then((res) => {
-      const children = (res || [])?.map(({ code, name, ...other }) => ({
+    getCityList({ pid: '510000' }).then(({ data }) => {
+      const children = (data || [])?.map(({ code, name, ...other }) => ({
         ...other,
         code,
         name,

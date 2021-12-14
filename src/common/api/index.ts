@@ -107,10 +107,10 @@ export async function postCreateCase(data?: any) {
 /**
  * 修改案例库
  */
-export async function putUpdateCase(params?: any) {
+export async function putUpdateCase(data?: any) {
   return request('/api/case', {
     method: 'put',
-    params,
+    data,
   });
 }
 

@@ -87,7 +87,7 @@ export const Standard = [
   { value: 1, label: '国标' },
   {
     value: 2,
-    label: '国标',
+    label: '地标',
     children: [
       { value: 3, label: '算法一' },
       { value: 4, label: '算法二' },

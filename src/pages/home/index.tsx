@@ -44,9 +44,9 @@ function FilterBar(props: any) {
   }, [onFilter, form, areaList]);
 
   useEffect(() => {
-    getCityList({ pid: '510000' }).then((res) => {
+    getCityList({ pid: '510000' }).then(({ data }) => {
       setAreaList(
-        (res || [])?.map(({ code, name, ...other }) => ({
+        (data || [])?.map(({ code, name, ...other }) => ({
           ...other,
           code,
           name,
@@ -201,7 +201,7 @@ function Home() {
       code,
       level,
       time: moment(date).format('YYYY-MM-DD'),
-    }).then((data) => setMarkList(data || []));
+    }).then(({ data }) => setMarkList(data || []));
   }, []);
   // 切换卫星/行政图
   useEffect(() => {

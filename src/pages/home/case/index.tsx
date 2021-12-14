@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from 'antd';
-import { useDispatch, useSelector, useRequest, history } from 'umi';
+import { useDispatch, useSelector, useRequest } from 'umi';
 import { PlusOutlined } from '@ant-design/icons';
 import CustomTable from '@/common/components/CustomTable';
 import Page from '@/common/components/Page';
@@ -30,7 +30,6 @@ function index() {
     },
   );
   const handleShowDetail = useCallback((id) => {
-    history.push('/monitor/detail');
     setShow(true);
     setId(id);
   }, []);
@@ -76,7 +75,6 @@ function index() {
           key="edit"
           style={{ marginRight: 10 }}
           size="small"
-          // onClick={handleShowDetail}
           onClick={() => {
             setId(row.id);
             setVisible(true);
@@ -210,7 +208,7 @@ function index() {
             onRefresh={handleRequest}
           />
         </div>
-        {/* <Detail visible={show} id={id} onClose={() => setShow(false)} /> */}
+        <Detail visible={show} id={id} onClose={() => setShow(false)} />
       </Page>
     </>
   );

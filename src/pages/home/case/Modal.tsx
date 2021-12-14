@@ -13,12 +13,13 @@ import {
 } from 'antd';
 import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import cn from 'classnames';
+import moment from 'moment';
 import Iconfont from '@/common/components/IconFont';
 import styles from './style.less';
 import SiChuanMap from '@/common/components/SichuanMap';
 import { Standard, Station } from '@/common/constant';
 import AreaFormItem from '@/common/components/AreaFormItem';
-import { postCreateCase, getCaseDetail } from '@/common/api';
+import { postCreateCase, getCaseDetail, putUpdateCase } from '@/common/api';
 
 interface Props {
   id: number | null;
@@ -30,6 +31,7 @@ interface Props {
 export default function (props: Props) {
   const { id, visible, onClose, onRefresh } = props;
   const [current, setCurrent] = useState<number>(0);
+  const [oldFile, setOldFile] = useState<any[]>([]);
   const levelRef = useRef<string>();
   const [form] = Form.useForm();
   const handleReset = useCallback(() => {
@@ -45,6 +47,7 @@ export default function (props: Props) {
   const handleSave = useCallback(() => {
     const { file, areaList, range, standard, ...other } = form.getFieldsValue();
     const [areaType, area] = areaList;
+    const request = id ? putUpdateCase : postCreateCase;
     const data = {
       areaType,
       area: `${area}`,
@@ -54,17 +57,18 @@ export default function (props: Props) {
       ...other,
     };
     if (file) {
-      data.file = JSON.stringify(
-        file.fileList.map(({ response }) => response.data),
-      );
+      data.file = JSON.stringify(file.fileList);
     }
-    postCreateCase(data).then(() => {
+    if (id) {
+      data.id = id;
+    }
+    request(data).then(() => {
       onClose();
       onRefresh();
       setCurrent(0);
       form.resetFields();
     });
-  }, [form, onClose]);
+  }, [id, form, onClose]);
 
   const handleCancel = useCallback(() => {
     form.resetFields();
@@ -141,7 +145,11 @@ export default function (props: Props) {
               labelCol={{ span: 4 }}
               style={{ width: '100%' }}
             >
-              <Upload action="/api/file/upload">
+              <Upload
+                action="/api/file/upload"
+                fileList={oldFile}
+                onChange={({ fileList }) => setOldFile(fileList)}
+              >
                 <Button>上传文件</Button>
               </Upload>
             </Form.Item>
@@ -161,7 +169,7 @@ export default function (props: Props) {
         </Row>
       </div>
     ),
-    [form, current],
+    [form, current, oldFile],
   );
   const previewDom = useMemo(
     () => (
@@ -184,10 +192,20 @@ export default function (props: Props) {
 
   useEffect(() => {
     if (id && visible) {
-      getCaseDetail(id).then((data) => {
-        const { area, areaType, endTime, standard, file } = data;
-        // form.setFields
+      getCaseDetail(id).then(({ data }) => {
+        const { area, areaType, startTime, endTime, standard, file, ...other } =
+          data;
+        form.setFieldsValue({
+          range: [moment(startTime), moment(endTime)],
+          areaList: [areaType, Number(area)],
+          standard: [standard],
+          file: { fileList: JSON.parse(file) },
+          ...other,
+        });
+        setOldFile(JSON.parse(file));
       });
+    } else {
+      setOldFile([]);
     }
   }, [id, visible]);
 
@@ -195,6 +213,7 @@ export default function (props: Props) {
     <Modal
       width={946}
       visible={visible}
+      destroyOnClose
       title={
         <Row align="middle" gutter={10}>
           <Col>
