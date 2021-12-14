@@ -30,9 +30,15 @@ const optionsWithDisabled = [
 function index() {
   const [form] = Form.useForm();
   const [radioValue, setradioValue] = useState(1);
+  const [graphVal, setGraph] = useState(1);
 
   const onChange = (e: any) => {
     setradioValue(e.target.value);
+  };
+
+  const graphChange = (e: any) => {
+    console.log('e.target.value', e.target.value);
+    setGraph(e.target.value);
   };
 
   const onValuesChange = (value: any, allValues: any) => {
@@ -120,9 +126,9 @@ function index() {
         <div className={styles.selectDataView}>
           <div className={styles.typeView}>
             类 型&emsp;
-            <Radio.Group onChange={onChange} value={radioValue}>
-              <Radio value={1}>条形图</Radio>
-              <Radio value={2}>柱状图</Radio>
+            <Radio.Group onChange={graphChange} value={graphVal}>
+              <Radio value="line">条形图</Radio>
+              <Radio value="bar">柱状图</Radio>
             </Radio.Group>
           </div>
           <div className={styles.typeView}>

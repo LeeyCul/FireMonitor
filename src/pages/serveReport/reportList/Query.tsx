@@ -1,18 +1,22 @@
-import React from 'react';
 import { Form, Input, Button, DatePicker } from 'antd';
+import dayjs from 'dayjs';
+import _ from 'lodash';
 import { SearchOutlined } from '@ant-design/icons';
 import Iconfont from '@/common/components/IconFont';
 
 const { RangePicker } = DatePicker;
-
 interface QueryProps {
   onchange?: (value: any) => void;
+  onResetFields?: () => void;
 }
 
-function Query({ onchange }: QueryProps) {
+function Query({ onchange, onResetFields }: QueryProps) {
   const [form] = Form.useForm();
   const onFinish = (values: any) => {
-    onchange?.(values);
+    const { time, name } = values || {};
+    const startTime = time?.[0] ? dayjs(time?.[0])?.format('YYYY-MM-DD') : null;
+    const endTime = time?.[0] ? dayjs(time?.[1])?.format('YYYY-MM-DD') : null;
+    onchange?.(_.pickBy({ startTime, endTime, name }));
   };
   return (
     <Form
@@ -24,7 +28,7 @@ function Query({ onchange }: QueryProps) {
       <Form.Item name="name" label="报告名称">
         <Input />
       </Form.Item>
-      <Form.Item name="username" label="时间范围">
+      <Form.Item name="time" label="时间范围">
         <RangePicker style={{ width: 200 }} />
       </Form.Item>
 
@@ -37,7 +41,10 @@ function Query({ onchange }: QueryProps) {
             &emsp;
             <Button
               icon={<Iconfont type="iconrefresh" size={12} />}
-              onClick={() => form.resetFields()}
+              onClick={() => {
+                form.resetFields();
+                onResetFields?.();
+              }}
             >
               重置
             </Button>

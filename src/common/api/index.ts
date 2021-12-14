@@ -153,16 +153,13 @@ export async function getDelete(params?: any) {
   });
 }
 
-// export async function postMultiUpload(data?: any) {
-//   return request('/api/file/upload-multi', {
-//     method: 'post',
-//     data,
-//   });
-// }
-
-// export async function postUpload(data?: any) {
-//   return request('/api/file/upload', {
-//     method: 'post',
-//     data,
-//   });
-// }
+/**
+ * 预测模块
+ */
+/* list */
+export async function getPredDataFilter(params?: any) {
+  return request('/api/pred-data/query/day-filter', {
+    method: 'get',
+    params,
+  });
+}

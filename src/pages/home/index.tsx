@@ -14,7 +14,7 @@ import useMapShiftBar from '@/common/components/UseInMap/MapShiftBar';
 import DataQuery from './dataQuery';
 import Statistic from './statistic';
 import Case from './case';
-import { getQueryDay, getCityList } from '@/common/api';
+import { getQueryDay, getAreaList } from '@/common/api';
 import useMarkerTooltip from '@/common/components/UseInMap/useMarkerTooltip';
 import useStateCallback from '@/common/hooks/useStateCallback';
 
@@ -44,9 +44,9 @@ function FilterBar(props: any) {
   }, [onFilter, form, areaList]);
 
   useEffect(() => {
-    getCityList({ pid: '510000' }).then(({ data }) => {
+    getAreaList({ pid: '510000' }).then((res) => {
       setAreaList(
-        (data || [])?.map(({ code, name, ...other }) => ({
+        (res?.data || [])?.map(({ code, name, ...other }) => ({
           ...other,
           code,
           name,
@@ -206,9 +206,8 @@ function Home() {
   // 切换卫星/行政图
   useEffect(() => {
     if (mapReady) {
-      const layer =
-        satelliteLayer.current ||
-        (satelliteLayer.current = new AmapRef.current.TileLayer.Satellite());
+      const layer = satelliteLayer.current
+        || (satelliteLayer.current = new AmapRef.current.TileLayer.Satellite());
       if (isSatellite) {
         mapRef.current?.add(layer);
       } else {
@@ -221,8 +220,7 @@ function Home() {
     if (mapReady) {
       mapRef.current?.remove(preMarkerList.current);
       preMarkerList.current.map((instance) =>
-        instance.off('click', handleClickMarker),
-      );
+        instance.off('click', handleClickMarker));
       const markerList = markList
         .filter((item) => hideLevel.every((hide) => item.levelSc1 !== hide))
         .map(
