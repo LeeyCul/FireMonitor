@@ -16,6 +16,9 @@
   .ant-tabs-top > .ant-tabs-nav {
     margin: 0;
   }
+  .ant-slider-rail {
+    background: #959595;
+  }
 }
 
 .filterBar {
@@ -74,5 +77,33 @@
     display: flex;
     justify-content: center;
     padding: 8px 0 32px;
+  }
+}
+
+.slider {
+  position: absolute;
+  right: 10%;
+  bottom: 102px;
+  left: 10%;
+  display: flex;
+  align-items: center;
+  width: 80%;
+  height: 78px;
+  &_play {
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+    line-height: 40px;
+    text-align: center;
+    background: #ffffff;
+    border-radius: 50%;
+  }
+  &_menu {
+    width: 78px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    background: #ffffff;
+    border-radius: 12px;
   }
 }

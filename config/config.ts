@@ -15,12 +15,12 @@ export default defineConfig({
   routes,
   fastRefresh: {},
   chainWebpack() {},
-  dynamicImport: {
-    loading: '@/common/components/Loading',
-  },
+  // dynamicImport: {
+  //   loading: '@/common/components/Loading',
+  // },
   proxy: {
     '/api': {
-      target: 'https://restapi.amap.com/v3/',
+      target: 'http://47.113.111.10:8888',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },

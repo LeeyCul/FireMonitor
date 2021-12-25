@@ -28,7 +28,7 @@ const errorHandler = (error: any) => {
   if (response && response.status) {
     const errorText: any = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
-    if (status === 401) {
+    if (status === 401 || status === 403) {
       const urlAddress = url.split('/').pop();
       if (urlAddress === 'login') {
         message.error(errorText);
@@ -39,7 +39,7 @@ const errorHandler = (error: any) => {
             content: '当前登录已过期，请重新登陆！',
             okText: '确定',
             onOk() {
-              // history.push('/login');
+              history.push('/login');
             },
           });
         }
@@ -64,12 +64,12 @@ const request = extend({
 request.interceptors.request.use((url: string, options: any) => {
   let token = sessionStorage.getItem('token');
   if (!token) {
-    // history.push('/login');
+    history.push('/login');
   }
   const headers = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    'X-Authorization': `Bearer ${token}`,
+    Authorization: `${token}`,
   };
   return {
     url: encodeURI(url),
@@ -83,6 +83,12 @@ request.interceptors.request.use((url: string, options: any) => {
 /**
  * response拦截器, 处理response
  */
-request.interceptors.response.use(async (response) => response.json());
+/**
+ * response拦截器, 处理response
+ */
+// request.interceptors.response.use(async (response) => {
+//   const res = await response.json();
+//   return res?.data;
+// });
 
 export default request;

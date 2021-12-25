@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, Divider } from 'antd';
+import { useDispatch, useSelector } from 'umi';
 import CustomTable from '@/common/components/CustomTable';
 import Page from '@/common/components/Page';
 import LevelTag from '@/common/components/LevelTag';
@@ -11,10 +11,14 @@ function index() {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [columnsList, setColumnsList] = useState<any[]>([]);
   const [slelectColKey, setSlelectColKey] = useState<string[]>();
+  const [query, setQuery] = useState<any>({});
+  const dispatch = useDispatch();
+  const { dataQuery } = useSelector((state: any) => state.detection);
+  const { records, total } = dataQuery || {};
   const columns = [
     {
       title: '站 号',
-      dataIndex: 'name',
+      dataIndex: 'device',
       isShow: true,
     },
     {
@@ -29,12 +33,12 @@ function index() {
     },
     {
       title: '日 期',
-      dataIndex: 'a1ge1',
+      dataIndex: 'time',
       isShow: true,
     },
     {
       title: '所属市（区）',
-      dataIndex: 'addr12ess1',
+      dataIndex: 'name',
     },
     {
       title: '所属乡',
@@ -42,23 +46,26 @@ function index() {
     },
     {
       title: '最高气温',
-      dataIndex: 'addr12ess3',
+      dataIndex: 'temperature',
+      isShow: true,
     },
     {
       title: '24小时降雨量',
-      dataIndex: 'addr12ess4',
+      dataIndex: 'rain',
+      isShow: true,
     },
     {
       title: '积雪深度',
-      dataIndex: 'addr12ess5',
+      dataIndex: 'snow',
+      isShow: true,
     },
     {
       title: '平均风速',
-      dataIndex: 'addr12ess6',
+      dataIndex: 'wind',
     },
     {
       title: '国标火险等级',
-      dataIndex: 'name2',
+      dataIndex: 'levelSc1',
       isShow: true,
       render: (index: number) => <LevelTag level={index} />,
     },
@@ -84,7 +91,18 @@ function index() {
 
     setColumnsList(columnsLists);
     setSlelectColKey(slelectKey as string[]);
+    dispatch({
+      type: 'detection/getDataQuery',
+      payload: { size: 10, ...query },
+    });
   }, []);
+
+  const changePage = (current: number, size?: number) => {
+    dispatch({
+      type: 'detection/getDataQuery',
+      payload: { size, current, ...query },
+    });
+  };
 
   const selectColChange = useCallback((checkedValues: any[]) => {
     const selectKeyList = columns.filter((item) =>
@@ -109,7 +127,7 @@ function index() {
     <div className={styles.pageTitleView}>
       <div>
         查询结果
-        <span className={styles.updateTime}>更新于2021-11-12 12:00</span>
+        {/* <span className={styles.updateTime}>更新于2021-11-12 12:00</span> */}
       </div>
       <div>
         显示列&emsp;
@@ -121,11 +139,18 @@ function index() {
       </div>
     </div>
   );
-
   return (
     <>
       <Page clsName={styles.dataQueryView}>
-        <Query />
+        <Query
+          onChange={(value) => {
+            setQuery(value);
+            dispatch({
+              type: 'detection/getDataQuery',
+              payload: { size: 10, ...value },
+            });
+          }}
+        />
         <hr className={styles.line} />
         <Page
           icon="iconsousuojieguo"
@@ -135,10 +160,16 @@ function index() {
           <CustomTable
             clsName={styles.tableView}
             columns={columnsList}
-            dataSource={data}
-            rowSelection={{
-              type: 'checkbox',
-              onChange: changeTable,
+            rowKey="name"
+            dataSource={records}
+            // rowSelection={{
+            //   type: 'checkbox',
+            //   onChange: changeTable,
+            // }}
+            pagination={{
+              showSizeChanger: true,
+              total,
+              onChange: changePage,
             }}
             showAlert={!!selectedRows?.length}
             multipleExtendNode={<MultipleExtendNode />}
