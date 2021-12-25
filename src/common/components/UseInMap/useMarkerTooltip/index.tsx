@@ -2,6 +2,16 @@ import { useRef, useState, useCallback, useMemo, useEffect } from 'react';
 import { Tooltip } from 'antd';
 import useStateCallback from '@/common/hooks/useStateCallback';
 import { LevelList } from '@/common/constant';
+import styles from './style.less';
+import Iconfont from '../../IconFont';
+
+const iconMap = {
+  1: 'iconsenlinhuoxian-lvse',
+  2: 'iconsenlinhuoxian-lan',
+  3: 'iconsenlinhuoxian-cheng',
+  4: 'iconsenlinhuoxian-huang',
+  5: 'iconsenlinhuoxian-hong',
+};
 
 interface Coordinates {
   x: number;
@@ -35,15 +45,28 @@ export default function useMarkerTooltip(
   }, []);
   const toolTipContent = useMemo(() => {
     if (!data) return null;
-    const { temperature, humidity, levelSc1, name, rain, snow, wind } = data;
-
+    const {
+      temperature,
+      humidity,
+      levelSc1,
+      name,
+      rain,
+      snow,
+      wind,
+      updatedAt,
+    } = data;
+    console.log(data);
     return (
-      <div>
-        <span>{name}</span>
-        <br />
-        <span>火险等级:</span>
-        <span>{LevelList[levelSc1 - 1]?.text}</span>
-        <br />
+      <div className={styles.toolTip}>
+        <div>
+          <Iconfont type={iconMap[levelSc1]} />
+          <span>{name}</span>
+          <p>
+            <span>火险等级:{LevelList[levelSc1 - 1]?.text}</span>
+            <span>最近数据更新:{updatedAt}</span>
+          </p>
+        </div>
+
         <span>温度:</span>
         <span>{temperature}</span>
         <br />
