@@ -231,7 +231,7 @@ function Home() {
 
   const handleDraw = useCallback((data) => {
     const { current: canvas } = canvasRef;
-    if (!canvas) return;
+    if (!canvas || !data.length) return;
     // mark.lng, mark.lat
     const x = [];
     const y = [];
@@ -246,7 +246,7 @@ function Home() {
       [bounds],
       variogram,
       // (34.312999 - 26.045865) / 250,
-      0.05,
+      0.1,
     );
     kriging.plot(canvas, grid!, grid?.xlim!, grid?.ylim!, [
       '#43CF7C',
