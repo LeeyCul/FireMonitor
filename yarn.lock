@@ -1658,6 +1658,11 @@
   resolved "https://registry.nlark.com/@sakitam-gis/kriging/download/@sakitam-gis/kriging-0.1.0.tgz#15c11ae5976ccb07afc81c1b06ddaa00a761eddb"
   integrity sha1-FcEa5ZdsywevyBwbBt2qAKdh7ds=
 
+"@sakitam-gis/kriging@^0.1.0":
+  "integrity" "sha512-xHUZHaoN5EZm25kkRJJRMZM8PM/cMHz3gLPJQBYokuTeG6awl/xkcJviBmmbEoh4WCJHwP10IIrMlri6qqUv+g=="
+  "resolved" "https://registry.npmjs.org/@sakitam-gis/kriging/-/kriging-0.1.0.tgz"
+  "version" "0.1.0"
+
 "@sinonjs/commons@^1.7.0":
   version "1.8.3"
   resolved "https://registry.nlark.com/@sinonjs/commons/download/@sinonjs/commons-1.8.3.tgz"
