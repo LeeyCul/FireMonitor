@@ -69,7 +69,6 @@ function index() {
     manual: true,
   });
   const { records, total } = data || {};
-  console.log('data', data);
   const changePage = (current: number, size?: number) => {
     run({ size, current, ...query });
   };
