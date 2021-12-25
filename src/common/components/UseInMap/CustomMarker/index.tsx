@@ -1,12 +1,20 @@
-import Level5 from './images/level5.png';
-import Level4 from './images/level4.png';
-import Level3 from './images/level3.png';
-import Level2 from './images/level2.png';
-import Level1 from './images/level1.png';
+function getImage(type: string, level: number) {
+  return require(`./images/${type}_${level}.png`);
+}
 
-export default function CustomMarkerHtml(temperature: number, level: number) {
-  const url = { 1: Level1, 2: Level2, 3: Level3, 4: Level4, 5: Level5 }[level];
-  return `<div class="custom-marker" style="background-image:url(${url})">
-      <p class="custom-marker-title">${temperature}℃</p>
+export default function CustomMarkerHtml(data: any, meteorology: string) {
+  if (!meteorology) {
+    return `<div class="custom-marker" style="background-image:url(${getImage(
+      'position',
+      data.levelSc1,
+    )})"/>`;
+  }
+  return `<div class="custom-marker" style="background-image:url(${getImage(
+    meteorology,
+    data.levelSc1,
+  )})">
+      <p class="custom-marker-title ${
+        meteorology === 'temperature' ? 'custom-temperature-marker' : ''
+      }">${data[meteorology]}${meteorology === 'temperature' ? '℃' : ''}</p>
     </div>`;
 }
